@@ -1,27 +1,4 @@
-// Copyright 2016 Google Inc. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-
 'use strict';
-
-
-/**
- * Media source root URL
- * @const
- */
-var MEDIA_SOURCE_ROOT =
-    'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/';
 
 /**
  * Width of progress bar in pixel
@@ -52,30 +29,17 @@ var PLAYER_STATE = {
     ERROR: 'ERROR'
 };
 
-/**
- * Cast player object
- * Main variables:
- *  - PlayerHandler object for handling media playback
- *  - Cast player variables for controlling Cast mode media playback
- *  - Current media variables for transition between Cast and local modes
- * @struct @constructor
- */
 var CastPlayer = function() {
-    /** @type {PlayerHandler} Delegation proxy for media playback */
     this.playerHandler = new PlayerHandler(this);
 
     /** @type {PLAYER_STATE} A state for media playback */
     this.playerState = PLAYER_STATE.IDLE;
 
-    /* Cast player variables */
     /** @type {cast.framework.RemotePlayer} */
     this.remotePlayer = null;
     /** @type {cast.framework.RemotePlayerController} */
     this.remotePlayerController = null;
 
-    /* Current media variables */
-    /** @type {number} A number for current media index */
-    this.currentMediaIndex = 0;
     /** @type {number} A number for current media time */
     this.currentMediaTime = 0;
     /** @type {number} A number for current media duration */
@@ -172,33 +136,6 @@ function getMovies() {
     }
 }
 
-/**
- * PlayerHandler
- *
- * This is a handler through which the application will interact
- * with both the RemotePlayer and LocalPlayer. Combining these two into
- * one interface is one approach to the dual-player nature of a Cast
- * Chrome application. Otherwise, the state of the RemotePlayer can be
- * queried at any time to decide whether to interact with the local
- * or remote players.
- *
- * To set the player used, implement the following methods for a target object
- * and call setTarget(target).
- *
- * Methods to implement:
- *  - play()
- *  - pause()
- *  - stop()
- *  - seekTo(time)
- *  - load(mediaIndex)
- *  - getMediaDuration()
- *  - getCurrentMediaTime()
- *  - setVolume(volumeSliderPosition)
- *  - mute()
- *  - unMute()
- *  - isMuted()
- *  - updateDisplayMessage()
- */
 var PlayerHandler = function(castPlayer) {
     this.target = {};
 
@@ -210,7 +147,7 @@ var PlayerHandler = function(castPlayer) {
         if (castPlayer.playerState !== PLAYER_STATE.PLAYING &&
             castPlayer.playerState !== PLAYER_STATE.PAUSED &&
             castPlayer.playerState !== PLAYER_STATE.LOADED) {
-            this.load(castPlayer.currentMediaIndex);
+            this.load();
             return;
         }
 
@@ -239,12 +176,12 @@ var PlayerHandler = function(castPlayer) {
         this.updateDisplayMessage();
     };
 
-    this.load = function(mediaIndex) {
+    this.load = function() {
         castPlayer.playerState = PLAYER_STATE.LOADING;
 
         document.getElementById('media_title').innerHTML = videoTitle;
 
-        this.target.load(mediaIndex);
+        this.target.load();
         this.updateDisplayMessage();
     };
 
@@ -325,7 +262,7 @@ CastPlayer.prototype.setupLocalPlayer = function () {
         localPlayer.stop();
     };
 
-    playerTarget.load = function(mediaIndex) {
+    playerTarget.load = function() {
         localPlayer.src = videoUrl;
         localPlayer.load();
     }.bind(this);
@@ -418,9 +355,6 @@ CastPlayer.prototype.setupRemotePlayer = function () {
         }.bind(this)
     );
 
-    // This object will implement PlayerHandler callbacks with
-    // remotePlayerController, and makes necessary UI updates specific
-    // to remote playback
     var playerTarget = {};
 
     playerTarget.play = function () {
@@ -444,15 +378,15 @@ CastPlayer.prototype.setupRemotePlayer = function () {
          this.remotePlayerController.stop();
     }.bind(this);
 
-    playerTarget.load = function (mediaIndex) {
-        console.log('Loading...' + this.mediaContents[mediaIndex]['title']);
+    playerTarget.load = function () {
+        console.log('Loading...' + videoTitle);
         var mediaInfo = new chrome.cast.media.MediaInfo(videoUrl, 'video/mp4');
 
         mediaInfo.metadata = new chrome.cast.media.GenericMediaMetadata();
         mediaInfo.metadata.metadataType = chrome.cast.media.MetadataType.GENERIC;
-        mediaInfo.metadata.title = this.mediaContents[mediaIndex]['title'];
+        mediaInfo.metadata.title = videoTitle;
         mediaInfo.metadata.images = [
-            {'url': MEDIA_SOURCE_ROOT + this.mediaContents[mediaIndex]['thumb']}];
+            {'url': videoImage}];
 
         var request = new chrome.cast.media.LoadRequest(mediaInfo);
         castSession.loadMedia(request).then(
@@ -477,8 +411,8 @@ CastPlayer.prototype.setupRemotePlayer = function () {
         document.getElementById('playerstatebg').style.display = 'block';
         document.getElementById('video_image_overlay').style.display = 'block';
         document.getElementById('playerstate').innerHTML =
-            this.mediaContents[ this.currentMediaIndex]['title'] + ' ' +
-            this.playerState + ' on ' + castSession.getCastDevice().friendlyName;
+            this.mediaContents[ videoTitle + ' ' +
+            this.playerState + ' on ' + castSession.getCastDevice().friendlyName];
     }.bind(this);
 
     playerTarget.setVolume = function (volumeSliderPosition) {
