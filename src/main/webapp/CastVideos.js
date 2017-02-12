@@ -114,7 +114,7 @@ function getToken(){
 function getMovies() {
     var token = getToken();
     var request = new XMLHttpRequest();
-    request.open("GET", "https://localmovies.hopto.org:8443/titlerequest?path=/home/nathan/LocalMedia/Movies&access_token=" + token, false);
+    request.open("GET", "https://localmovies.hopto.org:8443/titlerequest?path=/home/nathan/LocalMedia/Movies&access_token=" + token, true);
     request.send(null);
     var json = JSON.parse(request.responseText);
     for(var i = 0; i < json.length; i++){
