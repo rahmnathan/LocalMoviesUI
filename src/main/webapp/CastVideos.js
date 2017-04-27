@@ -100,14 +100,12 @@ var videoImage;
 
 function getToken(){
     var request = new XMLHttpRequest();
-    var username = document.getElementsByName('username')[0].value;
-    var password = document.getElementsByName('password')[0].value;
-    request.open("POST", "https://localmovies.hopto.org:8452/accessToken", false);
+    request.open("POST", "https://localmovies.hopto.org:8452/open/accessToken", false);
     request.send();
     return request.responseText;
 }
 
-function getMovies() {
+window.onload = function() {
     var token = getToken();
     var request = new XMLHttpRequest();
     request.open("GET", "https://localmovies.hopto.org:8443/titlerequest?path=Movies/&access_token=" + token, true);
@@ -130,9 +128,7 @@ function getMovies() {
         document.body.appendChild(image);
         }());
     }
-}
-
-getMovies();
+};
 
 var PlayerHandler = function(castPlayer) {
     this.target = {};

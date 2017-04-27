@@ -13,8 +13,15 @@
         </auth-constraint>
     </security-constraint>
 
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>inSecure</web-resource-name>
+            <url-pattern>/open/*</url-pattern>
+        </web-resource-collection>
+    </security-constraint>
+
     <login-config>
-        <auth-method>KEYCLOAK</auth-method>
+        <auth-method>BASIC</auth-method>
     </login-config>
 
     <security-role>
