@@ -102,13 +102,9 @@ function getToken(){
     var request = new XMLHttpRequest();
     var username = document.getElementsByName('username')[0].value;
     var password = document.getElementsByName('password')[0].value;
-    request.open("POST", "https://localmovies.hopto.org:8445/auth/realms/Demo/protocol/openid-connect/token", false);
-    var headers = encodeURIComponent("grant_type") + "=" + encodeURIComponent("password") + "&" + encodeURIComponent("client_id")
-        + "=" + encodeURIComponent("movielogin") + "&" + encodeURIComponent("username") + "=" + encodeURIComponent(username)
-        + "&" + encodeURIComponent("password") + "=" + encodeURIComponent(password);
-    request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-    request.send(headers);
-    return JSON.parse(request.responseText).access_token;
+    request.open("POST", "https://localmovies.hopto.org:8452/accessToken", false);
+    request.send();
+    return request.responseText;
 }
 
 function getMovies() {
@@ -135,6 +131,8 @@ function getMovies() {
         }());
     }
 }
+
+getMovies();
 
 var PlayerHandler = function(castPlayer) {
     this.target = {};

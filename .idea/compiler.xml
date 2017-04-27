@@ -6,10 +6,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="LocalMovies-UI" />
         <module name="LocalMoviesUI" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="LocalMovies-UI" target="1.5" />
       <module name="LocalMoviesUI" target="1.5" />
     </bytecodeTargetLevel>
   </component>
