@@ -1,7 +1,7 @@
 {
-  "realm" : "Demo",
-  "resource" : "movielogin",
-  "auth-server-url" : "https://localmovies.hopto.org:8445/auth",
-  "ssl-required" : "external",
-  "expose-token" : true
+  "realm": "Demo",
+  "auth-server-url": "https://localmovies.hopto.org:8445/auth",
+  "ssl-required": "external",
+  "resource": "movielogin",
+  "public-client": true
 }
