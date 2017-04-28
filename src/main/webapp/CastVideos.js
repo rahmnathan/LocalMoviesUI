@@ -108,8 +108,10 @@ function getToken(){
 window.onload = function() {
     var token = getToken();
     var request = new XMLHttpRequest();
-    request.open("GET", "https://localmovies.hopto.org:8443/titlerequest?path=Movies/&access_token=" + token, true);
+    request.open("GET", "https://localmovies.hopto.org:8443/titlerequest?path=Movies", true);
+    request.headers = {"Authorization":"Bearer " + token};
     request.send(null);
+    console.log(request.responseText);
     var json = JSON.parse(request.responseText);
     for(var i = 0; i < json.length; i++){
         (function () {
