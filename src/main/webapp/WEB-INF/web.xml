@@ -17,7 +17,7 @@
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>inSecure</web-resource-name>
-            <url-pattern>/movie-ui/open/*</url-pattern>
+            <url-pattern>/open/*</url-pattern>
         </web-resource-collection>
     </security-constraint>
 

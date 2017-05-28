@@ -100,7 +100,7 @@ var videoImage;
 
 function getToken(){
     var request = new XMLHttpRequest();
-    request.open("POST", "https://localmovies.hopto.org/movie-ui/open/accessToken", false);
+    request.open("POST", "https://localmovies.hopto.org/open/accessToken", false);
     request.send();
     return request.responseText;
 }
