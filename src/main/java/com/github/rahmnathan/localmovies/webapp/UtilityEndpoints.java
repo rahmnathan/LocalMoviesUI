@@ -1,4 +1,4 @@
-package nr.localmovies.webapp;
+package com.github.rahmnathan.localmovies.webapp;
 
 import org.keycloak.KeycloakSecurityContext;
 import org.keycloak.adapters.RefreshableKeycloakSecurityContext;

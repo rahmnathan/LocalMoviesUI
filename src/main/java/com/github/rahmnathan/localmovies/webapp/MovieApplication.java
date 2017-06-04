@@ -1,4 +1,4 @@
-package nr.localmovies.webapp;
+package com.github.rahmnathan.localmovies.webapp;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
