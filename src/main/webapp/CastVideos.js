@@ -115,10 +115,10 @@ window.onload = function() {
         (function () {
             var json = jsonList[i];
             var image = new Image();
-            image.src = "https://localmovies.hopto.org/movie-api/v1/poster?path=" + json.path.split(" ").join("%20") + "&access_token=" + token;
+            image.src = 'data:image/png;base64,' + json.image;
             image.title = json.title;
             image.addEventListener("click", function (e) {
-                videoImage = image.src;
+                videoImage = "https://localmovies.hopto.org/movie-api/v1/poster?path=" + json.path.split(" ").join("%20") + "&access_token=" + token;
                 videoTitle = image.title;
                 videoUrl = "https://localmovies.hopto.org/movie-api/v1/video.mp4?path=" + json.path.split(" ").join("%20") + "&access_token=" + token;
             });
