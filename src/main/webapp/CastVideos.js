@@ -122,8 +122,9 @@ function getMovies() {
     var progressBar = document.getElementById("myBar");
     intervalId = setInterval(function () {
         if(currentPage > pageCount){
-            progressBar.parentNode.removeChild(progressBar);
             clearInterval(intervalId);
+            var progress = document.getElementById("progressWrapper");
+            progress.parentNode.removeChild(progress);
             return;
         }
         var request = new XMLHttpRequest();
@@ -138,7 +139,7 @@ function getMovies() {
 
             image.addEventListener("click", function (e) {
                 videoImage = "https://localmovies.hopto.org/movie-api/v1/poster?path=" + movie.path.split(" ").join("%20") + "&access_token=" + token;
-                videoTitle = image.title;
+                videoTitle = image.title.substr(0, image.title.length - 4);
                 videoUrl = "https://localmovies.hopto.org/movie-api/v1/video.mp4?path=" + movie.path.split(" ").join("%20") + "&access_token=" + token;
             });
             document.body.appendChild(image);
