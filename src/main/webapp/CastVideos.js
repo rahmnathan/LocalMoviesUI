@@ -127,6 +127,7 @@ function getMovies() {
             progress.parentNode.removeChild(progress);
             return;
         }
+        progressBar.style.width = (currentPage / pageCount) * 100 + '%';
         var request = new XMLHttpRequest();
         request.open("GET", "https://localmovies.hopto.org/movie-api/v1/titlerequest?path=Movies&page=" + currentPage + "&resultsPerPage=30&access_token=" + token, false);
         request.send(null);
@@ -145,7 +146,6 @@ function getMovies() {
             document.body.appendChild(image);
         }
         currentPage++;
-        progressBar.style.width = (currentPage / pageCount) * 100 + '%';
     }, 1500);
 }
 
