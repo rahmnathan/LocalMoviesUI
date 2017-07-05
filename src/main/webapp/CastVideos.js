@@ -136,11 +136,11 @@ function getMovies() {
             const movie = movieList[x];
             const image = new Image();
             image.src = 'data:image/png;base64,' + movie.image;
-            image.title = movie.title;
+            image.title = movie.title.substr(0, movie.title.length - 4);
 
             image.addEventListener("click", function (e) {
                 videoImage = "https://localmovies.hopto.org/movie-api/v1/poster?path=" + movie.path.split(" ").join("%20") + "&access_token=" + token;
-                videoTitle = image.title.substr(0, image.title.length - 4);
+                videoTitle = image.title;
                 videoUrl = "https://localmovies.hopto.org/movie-api/v1/video.mp4?path=" + movie.path.split(" ").join("%20") + "&access_token=" + token;
             });
             document.body.appendChild(image);
