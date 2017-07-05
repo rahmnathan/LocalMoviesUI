@@ -97,10 +97,9 @@ CastPlayer.prototype.switchPlayer = function() {
 var videoUrl;
 var videoTitle;
 var videoImage;
-var token;
-var pageCount;
 var currentPage = 0;
 var intervalId;
+var token = getToken();
 
 function getToken(){
     var request = new XMLHttpRequest();
@@ -115,14 +114,15 @@ function getMovieCount(){
     var countRequest = new XMLHttpRequest();
     countRequest.open("GET", "https://localmovies.hopto.org/movie-api/v1/movieinfocount?path=Movies&access_token=" + token, false);
     countRequest.send(null);
-    pageCount = countRequest.getResponseHeader("Count");
+    return countRequest.getResponseHeader("Count");
 }
 
 function getMovies() {
-    token = getToken();
-    pageCount = getMovieCount()/30;
+    var pageCount = getMovieCount()/30;
+    var progressBar = document.getElementById("myBar");
     intervalId = setInterval(function () {
         if(currentPage > pageCount){
+            progressBar.parentNode.removeChild(progressBar);
             clearInterval(intervalId);
             return;
         }
@@ -144,6 +144,7 @@ function getMovies() {
             document.body.appendChild(image);
         }
         currentPage++;
+        progressBar.style.width = (currentPage / pageCount) * 100 + '%';
     }, 1500);
 }
 
