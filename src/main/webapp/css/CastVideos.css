@@ -1,6 +1,6 @@
 
 body {
-  background-color:#F2F2F2;
+  background-color: rgb(21, 21, 30);
   font-family: 'Roboto', "OpenSans", "Verdana", Georgia, Serif;
 }
 
@@ -17,10 +17,12 @@ body {
 }
 
 #movieYear {
+  color: white;
   margin: 2px;
 }
 
 #movieRating {
+  color: white;
   margin: 2px;
 }
 
@@ -30,12 +32,17 @@ body {
 }
 
 #movie {
+  border-style: solid;
+  border-color: #2b2b2b;
+  background-color: rgb(21, 21, 30);
   max-width: 150px;
   padding: 5px;
   height: 290px;
 }
 
 #movieTitle {
+  color: white;
+  font-weight: bold;
   word-wrap: normal;
   margin: 2px;
 }
@@ -153,6 +160,7 @@ body {
 #title_text {
   width:100%;
   text-align: center ;
+  color: white;
 }
 
 #main_video {
@@ -202,14 +210,13 @@ body {
   float:left;
   width:940px;
   height:116px;
-  margin:-4px 0px 0px 40px;
+  margin:70px 0px 0px 40px;
   padding:10px;
-  opacity:0.9;
-  background-color:#DDE0E5;
-  color: #000;
+  background-color: #2b2b2b;
 }
 
 #media_title {
+  color: white;
   float:left;
   margin:0px 10px 0px 0px;
   padding:0px;

@@ -1,7 +1,7 @@
 'use strict';
 
 var videoUrl;
-var videoTitle;
+var videoTitle = "Current title - ";
 var videoImage;
 var token = getToken();
 
@@ -33,9 +33,8 @@ app.controller( 'MainController', ['$scope', 'movies', function ($scope, movies)
     });
 
     $scope.playMovie = function (movie) {
-        console.log('CLICK DETECTED ON MOVIE - ' + movie.title);
         videoImage = "https://localmovies.hopto.org/movie-api/v1/poster?path=" + movie.path.split(" ").join("%20") + "&access_token=" + token;
-        videoTitle = movie.title.substr(0, movie.title.length - 4);
+        videoTitle = "Current title - " + movie.title.substr(0, movie.title.length - 4);
         videoUrl = "https://localmovies.hopto.org/movie-api/v1/video.mp4?path=" + movie.path.split(" ").join("%20") + "&access_token=" + token;
     }
 }]);
