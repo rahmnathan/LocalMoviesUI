@@ -9,6 +9,55 @@ body {
   background-color: grey;
 }
 
+.menu {
+  list-style: none;
+  border-bottom: 0.1em solid black;
+  margin-bottom: 2em;
+  padding: 0 0 0.5em;
+}
+
+#movieYear {
+  margin: 2px;
+}
+
+#movieRating {
+  margin: 2px;
+}
+
+#movies {
+  float: left;
+  display: inline-table;
+}
+
+#movie {
+  max-width: 150px;
+  padding: 5px;
+  height: 290px;
+}
+
+#movieTitle {
+  word-wrap: normal;
+  margin: 2px;
+}
+
+.menu:before {
+  content: "[";
+}
+
+.menu:after {
+  content: "]";
+}
+
+.menu > li {
+  display: inline;
+}
+
+.menu > li + li:before {
+  content: "|";
+  padding-right: 0.3em;
+}
+
+
 #myBar {
   width: 0;
   height: 30px;

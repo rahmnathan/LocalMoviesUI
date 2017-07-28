@@ -1,5 +1,45 @@
 'use strict';
 
+var videoUrl;
+var videoTitle;
+var videoImage;
+var token = getToken();
+
+function getToken(){
+    var request = new XMLHttpRequest();
+    request.open("POST", "https://localmovies.hopto.org/open/accessToken", false);
+    request.send();
+    return request.responseText;
+}
+
+var app = angular.module('LocalMovies', [
+    'ngRoute'
+]);
+
+app.factory('movies', ['$http', function($http) {
+    return $http.get("https://localmovies.hopto.org/movie-api/v1/titlerequest?path=Movies&access_token=" + token)
+        .success(function(data) {
+            return data;
+        })
+        .error(function(data) {
+            return data;
+        });
+}]);
+
+app.controller( 'MainController', ['$scope', 'movies', function ($scope, movies) {
+
+    movies.success(function(data) {
+        $scope.movies = data;
+    });
+
+    $scope.playMovie = function (movie) {
+        console.log('CLICK DETECTED ON MOVIE - ' + movie.title);
+        videoImage = "https://localmovies.hopto.org/movie-api/v1/poster?path=" + movie.path.split(" ").join("%20") + "&access_token=" + token;
+        videoTitle = movie.title.substr(0, movie.title.length - 4);
+        videoUrl = "https://localmovies.hopto.org/movie-api/v1/video.mp4?path=" + movie.path.split(" ").join("%20") + "&access_token=" + token;
+    }
+}]);
+
 /**
  * Width of progress bar in pixel
  * @const
@@ -93,61 +133,6 @@ CastPlayer.prototype.switchPlayer = function() {
     }
     this.setupLocalPlayer();
 };
-
-var videoUrl;
-var videoTitle;
-var videoImage;
-var currentPage = 0;
-var intervalId;
-var token = getToken();
-
-function getToken(){
-    var request = new XMLHttpRequest();
-    request.open("POST", "https://localmovies.hopto.org/open/accessToken", false);
-    request.send();
-    return request.responseText;
-}
-
-window.onload = getMovies();
-
-function getMovieCount(){
-    var countRequest = new XMLHttpRequest();
-    countRequest.open("GET", "https://localmovies.hopto.org/movie-api/v1/movieinfocount?path=Movies&access_token=" + token, false);
-    countRequest.send(null);
-    return countRequest.getResponseHeader("Count");
-}
-
-function getMovies() {
-    var pageCount = getMovieCount()/30;
-    var progressBar = document.getElementById("myBar");
-    intervalId = setInterval(function () {
-        if(currentPage > pageCount){
-            clearInterval(intervalId);
-            var progress = document.getElementById("progressWrapper");
-            progress.parentNode.removeChild(progress);
-            return;
-        }
-        progressBar.style.width = (currentPage / pageCount) * 100 + '%';
-        var request = new XMLHttpRequest();
-        request.open("GET", "https://localmovies.hopto.org/movie-api/v1/titlerequest?path=Movies&page=" + currentPage + "&resultsPerPage=30&access_token=" + token, false);
-        request.send(null);
-        var movieList = JSON.parse(request.responseText);
-        for (var x = 0; x < movieList.length; x++) {
-            const movie = movieList[x];
-            const image = new Image();
-            image.src = 'data:image/png;base64,' + movie.image;
-            image.title = movie.title.substr(0, movie.title.length - 4);
-
-            image.addEventListener("click", function (e) {
-                videoImage = "https://localmovies.hopto.org/movie-api/v1/poster?path=" + movie.path.split(" ").join("%20") + "&access_token=" + token;
-                videoTitle = image.title;
-                videoUrl = "https://localmovies.hopto.org/movie-api/v1/video.mp4?path=" + movie.path.split(" ").join("%20") + "&access_token=" + token;
-            });
-            document.body.appendChild(image);
-        }
-        currentPage++;
-    }, 1500);
-}
 
 var PlayerHandler = function(castPlayer) {
     this.target = {};
