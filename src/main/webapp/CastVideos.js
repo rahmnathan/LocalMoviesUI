@@ -36,6 +36,7 @@ app.controller( 'MainController', ['$scope', 'movies', function ($scope, movies)
         videoImage = "https://localmovies.hopto.org/movie-api/v1/poster?path=" + movie.path.split(" ").join("%20") + "&access_token=" + token;
         videoTitle = "Current title - " + movie.title.substr(0, movie.title.length - 4);
         videoUrl = "https://localmovies.hopto.org/movie-api/v1/video.mp4?path=" + movie.path.split(" ").join("%20") + "&access_token=" + token;
+        document.getElementById('media_title').innerHTML = videoTitle;
     }
 }]);
 
