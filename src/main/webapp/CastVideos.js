@@ -28,6 +28,8 @@ app.factory('movies', ['$http', function($http) {
 
 app.controller( 'MainController', ['$scope', 'movies', function ($scope, movies) {
 
+    $scope.token = getToken();
+
     movies.success(function(data) {
         $scope.movies = data;
     });
