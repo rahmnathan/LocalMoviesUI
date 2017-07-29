@@ -60,7 +60,12 @@
         <div id="main">
             <div id="movies" ng-repeat="movie in movies">
                 <div id="movie" align="center">
-                    <img data-ng-src="data:image/png;base64, {{ movie.image }}" ng-click="playMovie(movie)">
+                    <div ng-if="movie.image == ''">
+                        <img src="images/nopicture.gif" ng-click="playMovie(movie)">
+                    </div>
+                    <div ng-if="movie.image != ''">
+                        <img data-ng-src="data:image/png;base64, {{ movie.image }}" ng-click="playMovie(movie)">
+                    </div>
                     <p id="movieTitle">{{ movie.title.substring(0, movie.title.length - 4) }}</p>
                     <p id="movieYear">Year - {{ movie.releaseYear }}</p>
                     <p id="movieRating">Rating - {{ movie.imdbrating }}</p>
