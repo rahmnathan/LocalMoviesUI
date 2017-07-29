@@ -17,7 +17,7 @@ var app = angular.module('LocalMovies', [
 ]);
 
 app.factory('movies', ['$http', function($http) {
-    return $http.get("https://localmovies.hopto.org/movie-api/v1/titlerequest?path=Movies&access_token=" + token)
+    return $http.get("https://localmovies.hopto.org/movie-api/v1/titlerequest?path=Movies&client=WEBAPP&access_token=" + token)
         .success(function(data) {
             return data;
         })

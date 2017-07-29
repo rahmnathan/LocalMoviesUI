@@ -60,10 +60,10 @@
         <div id="main">
             <div id="movies" ng-repeat="movie in movies">
                 <div id="movie" align="center">
-                    <div ng-if="movie.image == ''">
+                    <div ng-if="movie.image == 'noImage'">
                         <img src="images/nopicture.gif" ng-click="playMovie(movie)">
                     </div>
-                    <div ng-if="movie.image != ''">
+                    <div ng-if="movie.image != 'noImage'">
                         <img ng-src="https://localmovies.hopto.org/movie-api/v1/poster?path=Movies/{{movie.title}}&access_token={{token}}" ng-click="playMovie(movie)">
                     </div>
                     <p id="movieTitle">{{ movie.title.substring(0, movie.title.length - 4) }}</p>
