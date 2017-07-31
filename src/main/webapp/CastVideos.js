@@ -1,8 +1,10 @@
 'use strict';
 
-var videoTitle = "Current title - ";
 var videoUrl;
+var videoTitle = "Current title - ";
 var videoImageUrl;
+var accessToken = getToken();
+var apiUrl = window.location.protocol + "//" + window.location.hostname + "/movie-api/v1";
 
 function getToken(){
     var request = new XMLHttpRequest();
@@ -15,8 +17,8 @@ var app = angular.module('LocalMovies', [
     'ngRoute'
 ]);
 
-app.factory('movies', ['$http', '$scope', function($http, $scope) {
-    return $http.get($scope.apiUrl + "titlerequest?path=Movies&client=WEBAPP&access_token=" + $scope.token)
+app.factory('movies', ['$http', function($http) {
+    return $http.get(apiUrl + "/titlerequest?path=Movies&client=WEBAPP&access_token=" + accessToken)
         .success(function(data) {
             return data;
         })
@@ -26,18 +28,17 @@ app.factory('movies', ['$http', '$scope', function($http, $scope) {
 }]);
 
 app.controller('MainController', ['$scope', 'movies', function ($scope, movies) {
-    $scope.token = getToken();
-    $scope.apiUrl = window.location.protocol + "//" + window.location.hostname + "/movie-api/v1/";
+    $scope.accessToken = accessToken;
+    $scope.apiUrl = apiUrl;
 
     movies.success(function(data) {
         $scope.movies = data;
     });
 
     $scope.playMovie = function (movie) {
-        var params = encodeURIComponent(movie.path) + "&access_token=" + $scope.token;
+        videoImageUrl = apiUrl + "/poster?path=" + movie.path.split(" ").join("%20") + "&access_token=" + accessToken;
         videoTitle = "Current title - " + movie.title.substr(0, movie.title.length - 4);
-        videoUrl = $scope.apiUrl + "video.mp4?path=" + params;
-        videoImageUrl = $scope.apiUrl + "poster?path=" + params;
+        videoUrl = apiUrl + "/video.mp4?path=" + movie.path.split(" ").join("%20") + "&access_token=" + accessToken;
         document.getElementById('media_title').innerHTML = videoTitle;
     }
 }]);
