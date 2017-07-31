@@ -1,13 +1,12 @@
 'use strict';
 
-var videoUrl;
 var videoTitle = "Current title - ";
-var videoImage;
-var token = getToken();
+var videoUrl;
+var videoImageUrl;
 
 function getToken(){
     var request = new XMLHttpRequest();
-    request.open("POST", "https://localmovies.hopto.org/open/accessToken", false);
+    request.open("POST", window.location.protocol + "//" + window.location.hostname + "/open/accessToken", false);
     request.send();
     return request.responseText;
 }
@@ -16,8 +15,8 @@ var app = angular.module('LocalMovies', [
     'ngRoute'
 ]);
 
-app.factory('movies', ['$http', function($http) {
-    return $http.get("https://localmovies.hopto.org/movie-api/v1/titlerequest?path=Movies&client=WEBAPP&access_token=" + token)
+app.factory('movies', ['$http', '$scope', function($http, $scope) {
+    return $http.get($scope.apiUrl + "titlerequest?path=Movies&client=WEBAPP&access_token=" + $scope.token)
         .success(function(data) {
             return data;
         })
@@ -26,18 +25,19 @@ app.factory('movies', ['$http', function($http) {
         });
 }]);
 
-app.controller( 'MainController', ['$scope', 'movies', function ($scope, movies) {
-
+app.controller('MainController', ['$scope', 'movies', function ($scope, movies) {
     $scope.token = getToken();
+    $scope.apiUrl = window.location.protocol + "//" + window.location.hostname + "/movie-api/v1/";
 
     movies.success(function(data) {
         $scope.movies = data;
     });
 
     $scope.playMovie = function (movie) {
-        videoImage = "https://localmovies.hopto.org/movie-api/v1/poster?path=" + movie.path.split(" ").join("%20") + "&access_token=" + token;
+        var params = encodeURIComponent(movie.path) + "&access_token=" + $scope.token;
         videoTitle = "Current title - " + movie.title.substr(0, movie.title.length - 4);
-        videoUrl = "https://localmovies.hopto.org/movie-api/v1/video.mp4?path=" + movie.path.split(" ").join("%20") + "&access_token=" + token;
+        videoUrl = $scope.apiUrl + "video.mp4?path=" + params;
+        videoImageUrl = $scope.apiUrl + "poster?path=" + params;
         document.getElementById('media_title').innerHTML = videoTitle;
     }
 }]);
@@ -386,7 +386,7 @@ CastPlayer.prototype.setupRemotePlayer = function () {
         mediaInfo.metadata.metadataType = chrome.cast.media.MetadataType.GENERIC;
         mediaInfo.metadata.title = videoTitle;
         mediaInfo.metadata.images = [
-            {'url': videoImage}];
+            {'url': videoImageUrl}];
 
         var request = new chrome.cast.media.LoadRequest(mediaInfo);
         castSession.loadMedia(request).then(
