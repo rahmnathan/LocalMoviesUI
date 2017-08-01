@@ -36,9 +36,9 @@ app.controller('MainController', ['$scope', 'movies', function ($scope, movies) 
     });
 
     $scope.playMovie = function (movie) {
-        videoImageUrl = apiUrl + "/poster?path=" + movie.path.split(" ").join("%20") + "&access_token=" + accessToken;
+        videoImageUrl = apiUrl + "/poster?path=" + encodeURIComponent(movie.path) + "&access_token=" + accessToken;
         videoTitle = "Current title - " + movie.title.substr(0, movie.title.length - 4);
-        videoUrl = apiUrl + "/video.mp4?path=" + movie.path.split(" ").join("%20") + "&access_token=" + accessToken;
+        videoUrl = apiUrl + "/video.mp4?path=" + encodeURIComponent(movie.path) + "&access_token=" + accessToken;
         document.getElementById('media_title').innerHTML = videoTitle;
     }
 }]);
