@@ -1,7 +1,6 @@
 package com.github.rahmnathan.localmovies.webapp;
 
 import org.keycloak.KeycloakSecurityContext;
-import org.keycloak.adapters.RefreshableKeycloakSecurityContext;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +25,7 @@ public class UtilityEndpoints {
     @POST
     @Path("/accessToken")
     public String accessToken(@Context HttpServletRequest request){
-        KeycloakSecurityContext securityContext = (RefreshableKeycloakSecurityContext) request.getAttribute(KeycloakSecurityContext.class.getName());
+        KeycloakSecurityContext securityContext = (KeycloakSecurityContext) request.getAttribute(KeycloakSecurityContext.class.getName());
         return securityContext.getIdTokenString();
     }
 }
