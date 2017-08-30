@@ -17,12 +17,6 @@
         <dependency>
             <groupId>org.wildfly.swarm</groupId>
             <artifactId>management</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.glassfish</groupId>
-                    <artifactId>javax.el-impl</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -32,12 +26,6 @@
         <dependency>
             <groupId>org.wildfly.swarm</groupId>
             <artifactId>keycloak</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.glassfish</groupId>
-                    <artifactId>javax.el-impl</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>javax</groupId>
