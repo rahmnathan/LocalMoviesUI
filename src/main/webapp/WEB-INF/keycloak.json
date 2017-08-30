@@ -3,5 +3,6 @@
   "auth-server-url": "https://localmovies.hopto.org/auth",
   "ssl-required": "external",
   "resource": "movielogin",
-  "public-client": true
+  "public-client": true,
+  "use-resource-role-mappings": true
 }
