@@ -26,6 +26,6 @@ public class UtilityEndpoints {
     @Path("/accessToken")
     public String accessToken(@Context HttpServletRequest request){
         KeycloakSecurityContext securityContext = (KeycloakSecurityContext) request.getAttribute(KeycloakSecurityContext.class.getName());
-        return securityContext.getIdTokenString();
+        return securityContext.getTokenString();
     }
 }
