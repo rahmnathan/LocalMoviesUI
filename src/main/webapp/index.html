@@ -59,7 +59,7 @@
 
         <p id="search">
             Search by title: <input title="search" type="text" ng-model="search.title">
-             Sort by: <select ng-model="selectedSort">
+             Sort by: <select ng-model="selectedSort" ng-init="selectedSort = 'title'">
                 <option value="releaseYear">Year</option>
                 <option value="imdbrating">Rating</option>
                 <option value="title">Title</option>
