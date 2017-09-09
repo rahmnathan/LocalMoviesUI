@@ -57,8 +57,12 @@
           <div id="carousel">
           </div>
 
+        <p id="search">
+            Search by title: <input title="search" type="text" ng-model="search.title">
+        </p>
+
         <div id="main">
-            <div id="movies" ng-repeat="movie in movies">
+            <div id="movies" ng-repeat="movie in movies | filter:search">
                 <div id="movie" align="center">
                     <div ng-if="movie.image == 'noImage'">
                         <img src="images/nopicture.gif" ng-click="playMovie(movie)">
