@@ -63,11 +63,11 @@
                 <option value="releaseYear">Year</option>
                 <option value="imdbrating">Rating</option>
                 <option value="title">Title</option>
-        </select>
+            </select>
         </p>
 
         <div id="main">
-            <div id="movies" ng-repeat="movie in movies | filter:search | orderBy:selectedSort:true">
+            <div id="movies" ng-repeat="movie in movies | filter:search | orderBy:selectedSort:(selectedSort != 'title')">
                 <div id="movie" align="center">
                     <div ng-if="movie.image == 'noImage'">
                         <img src="images/nopicture.gif" ng-click="playMovie(movie)">
