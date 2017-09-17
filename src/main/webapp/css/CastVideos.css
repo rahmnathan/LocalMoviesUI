@@ -18,11 +18,13 @@ body {
 
 #movieYear {
   color: white;
+  font-size: 14px;
   margin: 2px;
 }
 
 #movieRating {
   color: white;
+  font-size: 14px;
   margin: 2px;
 }
 
@@ -41,11 +43,12 @@ body {
   background-color: rgb(21, 21, 30);
   max-width: 150px;
   padding: 5px;
-  height: 290px;
+  height: 295px;
 }
 
 #movieTitle {
   color: white;
+  font-size: 15px;
   font-weight: bold;
   word-wrap: normal;
   margin: 2px;
