@@ -32,16 +32,28 @@ app.service('movieService', ['$http', function($http) {
 app.controller('MainController', ['$scope', 'movieService', function ($scope, movieService) {
     $scope.accessToken = accessToken;
     $scope.apiUrl = apiUrl;
+    $scope.currentPath = "";
 
     $scope.playMovie = function (movie) {
-        videoImageUrl = apiUrl + "/poster?path=" + encodeURIComponent(movie.movieInfo.path) + "&access_token=" + accessToken;
-        videoTitle = movie.movieInfo.title.substr(0, movie.movieInfo.title.length - 4);
-        videoUrl = apiUrl + "/video.mp4?path=" + encodeURIComponent(movie.path) + "&access_token=" + accessToken;
-        document.getElementById('media_title').innerHTML = videoTitle;
+        var pathLength = $scope.currentPath.split("/").length;
+        console.log(pathLength);
+        if($scope.currentPath.includes("movies") || pathLength == 3) {
+            videoImageUrl = apiUrl + "/poster?path=" + encodeURIComponent(movie.path) + "&access_token=" + accessToken;
+            videoTitle = movie.movieInfo.title.substr(0, movie.movieInfo.title.length - 4);
+            videoUrl = apiUrl + "/video.mp4?path=" + encodeURIComponent($scope.currentPath + "/" + movie.movieInfo.title) + "&access_token=" + accessToken;
+            document.getElementById('media_title').innerHTML = videoTitle;
+        } else {
+            $scope.updateList(movie.movieInfo.title);
+        }
     };
 
-    $scope.updateList = function (path) {
-        movieService.getMovies(path).success(function (data) {
+    $scope.updateList = function (title) {
+        if(title.toLowerCase() == "movies" || title.toLowerCase() == "series"){
+            $scope.currentPath = title;
+        } else {
+            $scope.currentPath += ("/" + title);
+        }
+        movieService.getMovies($scope.currentPath).success(function (data) {
             $scope.movies = data;
         });
     };
