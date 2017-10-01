@@ -1,7 +1,7 @@
 'use strict';
 
 var videoUrl;
-var videoTitle = "Current title - ";
+var videoTitle;
 var videoImageUrl;
 var accessToken = getToken();
 var apiUrl = window.location.protocol + "//" + window.location.hostname + "/movie-api/v1";
@@ -19,7 +19,7 @@ var app = angular.module('LocalMovies', [
 
 app.service('movieService', ['$http', function($http) {
     this.getMovies = function (path) {
-        return $http.get(apiUrl + "/titlerequest?path=" + path + "&client=WEBAPP&access_token=" + accessToken)
+        return $http.get(apiUrl + "/titlerequest?path=" + encodeURIComponent(path) + "&client=WEBAPP&access_token=" + accessToken)
             .success(function(data) {
                 return data;
             })
@@ -36,8 +36,7 @@ app.controller('MainController', ['$scope', 'movieService', function ($scope, mo
 
     $scope.playMovie = function (movie) {
         var pathLength = $scope.currentPath.split("/").length;
-        console.log(pathLength);
-        if($scope.currentPath.includes("movies") || pathLength == 3) {
+        if($scope.currentPath.toLowerCase().includes("movies") || pathLength == 3) {
             videoImageUrl = apiUrl + "/poster?path=" + encodeURIComponent(movie.path) + "&access_token=" + accessToken;
             videoTitle = movie.movieInfo.title.substr(0, movie.movieInfo.title.length - 4);
             videoUrl = apiUrl + "/video.mp4?path=" + encodeURIComponent($scope.currentPath + "/" + movie.movieInfo.title) + "&access_token=" + accessToken;
