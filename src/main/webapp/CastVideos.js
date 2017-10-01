@@ -17,29 +17,43 @@ var app = angular.module('LocalMovies', [
     'ngRoute'
 ]);
 
-app.factory('movies', ['$http', function($http) {
-    return $http.get(apiUrl + "/titlerequest?path=Movies&client=WEBAPP&access_token=" + accessToken)
-        .success(function(data) {
-            return data;
-        })
-        .error(function(data) {
-            return data;
-        });
+app.service('movieService', ['$http', function($http) {
+    this.getMovies = function (path) {
+        return $http.get(apiUrl + "/titlerequest?path=" + path + "&client=WEBAPP&access_token=" + accessToken)
+            .success(function(data) {
+                return data;
+            })
+            .error(function(data) {
+                return data;
+            });
+    };
 }]);
 
-app.controller('MainController', ['$scope', 'movies', function ($scope, movies) {
+app.controller('MainController', ['$scope', 'movieService', function ($scope, movieService) {
     $scope.accessToken = accessToken;
     $scope.apiUrl = apiUrl;
-
-    movies.success(function(data) {
-        $scope.movies = data;
-    });
 
     $scope.playMovie = function (movie) {
         videoImageUrl = apiUrl + "/poster?path=" + encodeURIComponent(movie.movieInfo.path) + "&access_token=" + accessToken;
         videoTitle = movie.movieInfo.title.substr(0, movie.movieInfo.title.length - 4);
         videoUrl = apiUrl + "/video.mp4?path=" + encodeURIComponent(movie.path) + "&access_token=" + accessToken;
         document.getElementById('media_title').innerHTML = videoTitle;
+    };
+
+    $scope.updateList = function (path) {
+        movieService.getMovies(path).success(function (data) {
+            $scope.movies = data;
+        });
+    };
+
+    $scope.updateList("Movies");
+
+    $scope.getDisplayTitle = function (title) {
+        if(title.includes(".")){
+            return title.substring(0, title.length - 4);
+        } else {
+            return title;
+        }
     }
 }]);
 

@@ -62,6 +62,12 @@
                 <option value="movieInfo.imdbrating">Rating</option>
                 <option value="movieInfo.title">Title</option>
             </select>
+            <button ng-click="updateList('Movies')">
+                Movies
+            </button>
+            <button ng-click="updateList('Series')">
+                Series
+            </button>
         </p>
 
         <div id="main">
@@ -73,7 +79,7 @@
                     <div ng-if="movie.image != 'noImage'">
                         <img ng-src="{{apiUrl}}/poster?path=Movies/{{movie.movieInfo.title}}&access_token={{accessToken}}" ng-click="playMovie(movie)">
                     </div>
-                    <p id="movieTitle">{{ movie.movieInfo.title.substring(0, movie.movieInfo.title.length - 4) }}</p>
+                    <p id="movieTitle">{{ getDisplayTitle(movie.movieInfo.title) }}</p>
                     <p id="movieYear">Year - {{ movie.movieInfo.releaseYear }}</p>
                     <p id="movieRating">Rating - {{ movie.movieInfo.imdbrating }}</p>
                 </div>
