@@ -38,11 +38,11 @@ app.controller('MainController', ['$scope', 'movieService', function ($scope, mo
         var pathLength = $scope.currentPath.split("/").length;
         if($scope.currentPath.toLowerCase().includes("movies") || pathLength == 3) {
             videoImageUrl = apiUrl + "/poster?path=" + encodeURIComponent(movie.path) + "&access_token=" + accessToken;
-            videoTitle = movie.movieInfo.title.substr(0, movie.movieInfo.title.length - 4);
-            videoUrl = apiUrl + "/video.mp4?path=" + encodeURIComponent($scope.currentPath + "/" + movie.movieInfo.title) + "&access_token=" + accessToken;
+            videoTitle = movie.movieInfo.title;
+            videoUrl = apiUrl + "/video.mp4?path=" + encodeURIComponent($scope.currentPath + "/" + movie.fileName) + "&access_token=" + accessToken;
             document.getElementById('media_title').innerHTML = videoTitle;
         } else {
-            $scope.updateList(movie.movieInfo.title);
+            $scope.updateList(movie.fileName);
         }
     };
 
