@@ -4,11 +4,11 @@ var videoUrl;
 var videoTitle;
 var videoImageUrl;
 var accessToken = getToken();
-var apiUrl = window.location.protocol + "//" + window.location.hostname + "/movie-api/v1";
+var apiUrl = "/movie-api";
 
 function getToken(){
     var request = new XMLHttpRequest();
-    request.open("POST", window.location.protocol + "//" + window.location.hostname + "/open/accessToken", false);
+    request.open("POST", "/open/accessToken", false);
     request.send();
     return request.responseText;
 }
@@ -17,13 +17,25 @@ var app = angular.module('LocalMovies', [
     'ngRoute'
 ]);
 
+function MovieRequest(path) {
+    this.path = path;
+    this.client = "WEBAPP";
+    this.page = 0;
+    this.resultsPerPage = 700;
+}
+
 app.service('movieService', ['$http', function($http) {
     this.getMovies = function (path) {
-        return $http.get(apiUrl + "/titlerequest?path=" + encodeURIComponent(path) + "&client=WEBAPP&access_token=" + accessToken)
+        var movieRequest = new MovieRequest(path);
+        var config = {
+            headers : {
+                'Content-Type': 'application/json',
+                'Authorization': 'bearer ' + accessToken
+            }
+        };
+
+        return $http.post(apiUrl + "/titlerequest", JSON.stringify(movieRequest), config)
             .success(function(data) {
-                return data;
-            })
-            .error(function(data) {
                 return data;
             });
     };
@@ -52,20 +64,13 @@ app.controller('MainController', ['$scope', 'movieService', function ($scope, mo
         } else {
             $scope.currentPath += ("/" + title);
         }
+
         movieService.getMovies($scope.currentPath).success(function (data) {
             $scope.movies = data;
         });
     };
 
     $scope.updateList("Movies");
-
-    $scope.getDisplayTitle = function (title) {
-        if(title.includes(".")){
-            return title.substring(0, title.length - 4);
-        } else {
-            return title;
-        }
-    }
 }]);
 
 /**

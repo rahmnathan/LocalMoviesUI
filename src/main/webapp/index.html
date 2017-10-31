@@ -79,7 +79,7 @@
                     <div ng-if="movie.image != 'noImage'">
                         <img ng-src="{{apiUrl}}/poster?path={{movie.path}}&access_token={{accessToken}}" ng-click="playMovie(movie)">
                     </div>
-                    <p id="movieTitle">{{ getDisplayTitle(movie.movieInfo.title) }}</p>
+                    <p id="movieTitle">{{ movie.movieInfo.title }}</p>
                     <p id="movieYear">Year - {{ movie.movieInfo.releaseYear }}</p>
                     <p id="movieRating">Rating - {{ movie.movieInfo.imdbrating }}</p>
                 </div>
