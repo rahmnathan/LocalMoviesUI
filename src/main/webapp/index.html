@@ -71,17 +71,34 @@
         </p>
 
         <div id="main">
-            <div id="movies" ng-repeat="movie in movies | filter:search | orderBy:selectedSort:(selectedSort != 'movieInfo.title')">
-                <div id="movie" align="center">
-                    <div ng-if="movie.movieInfo.image == 'noImage'">
-                        <img src="images/nopicture.gif" ng-click="playMovie(movie)">
+            <div ng-if="selectedSort != 'movieInfo.title'">
+                <div id="movies" ng-repeat="movie in movies | filter:search | orderBy:selectedSort:(selectedSort != 'movieInfo.title')">
+                    <div id="movie" align="center">
+                        <div ng-if="movie.movieInfo.image == 'noImage'">
+                            <img src="images/nopicture.gif" ng-click="playMovie(movie)">
+                        </div>
+                        <div ng-if="movie.image != 'noImage'">
+                            <img ng-src="{{apiUrl}}/poster?path={{movie.path}}&access_token={{accessToken}}" ng-click="playMovie(movie)">
+                        </div>
+                        <p id="movieTitle">{{ movie.movieInfo.title }}</p>
+                        <p id="movieYear">Year - {{ movie.movieInfo.releaseYear }}</p>
+                        <p id="movieRating">Rating - {{ movie.movieInfo.imdbrating }}</p>
                     </div>
-                    <div ng-if="movie.image != 'noImage'">
-                        <img ng-src="{{apiUrl}}/poster?path={{movie.path}}&access_token={{accessToken}}" ng-click="playMovie(movie)">
+                </div>
+            </div>
+            <div ng-if="selectedSort == 'movieInfo.title'">
+                <div id="movies" ng-repeat="movie in movies | filter:search">
+                    <div id="movie" align="center">
+                        <div ng-if="movie.movieInfo.image == 'noImage'">
+                            <img src="images/nopicture.gif" ng-click="playMovie(movie)">
+                        </div>
+                        <div ng-if="movie.image != 'noImage'">
+                            <img ng-src="{{apiUrl}}/poster?path={{movie.path}}&access_token={{accessToken}}" ng-click="playMovie(movie)">
+                        </div>
+                        <p id="movieTitle">{{ movie.movieInfo.title }}</p>
+                        <p id="movieYear">Year - {{ movie.movieInfo.releaseYear }}</p>
+                        <p id="movieRating">Rating - {{ movie.movieInfo.imdbrating }}</p>
                     </div>
-                    <p id="movieTitle">{{ movie.movieInfo.title }}</p>
-                    <p id="movieYear">Year - {{ movie.movieInfo.releaseYear }}</p>
-                    <p id="movieRating">Rating - {{ movie.movieInfo.imdbrating }}</p>
                 </div>
             </div>
         </div>
