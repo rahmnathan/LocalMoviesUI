@@ -4,6 +4,7 @@ var videoUrl;
 var videoTitle;
 var videoImageUrl;
 var accessToken = getToken();
+var choosingMedia = true;
 var apiUrl = "/movie-api";
 
 function getToken(){
@@ -56,6 +57,8 @@ app.controller('MainController', ['$scope', 'movieService', function ($scope, mo
         } else {
             $scope.updateList(movie.fileName);
         }
+
+        choosingMedia = true;
     };
 
     $scope.updateList = function (title) {
@@ -177,8 +180,10 @@ var PlayerHandler = function(castPlayer) {
     this.play = function() {
         if (castPlayer.playerState !== PLAYER_STATE.PLAYING &&
             castPlayer.playerState !== PLAYER_STATE.PAUSED &&
-            castPlayer.playerState !== PLAYER_STATE.LOADED) {
+            castPlayer.playerState !== PLAYER_STATE.LOADED ||
+            choosingMedia && castPlayer.playerState === PLAYER_STATE.PAUSED) {
             this.load();
+            choosingMedia = false;
             return;
         }
 
