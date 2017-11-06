@@ -181,7 +181,7 @@ var PlayerHandler = function(castPlayer) {
         if (castPlayer.playerState !== PLAYER_STATE.PLAYING &&
             castPlayer.playerState !== PLAYER_STATE.PAUSED &&
             castPlayer.playerState !== PLAYER_STATE.LOADED ||
-            choosingMedia && castPlayer.playerState === PLAYER_STATE.PAUSED) {
+            choosingMedia) {
             this.load();
             choosingMedia = false;
             return;
