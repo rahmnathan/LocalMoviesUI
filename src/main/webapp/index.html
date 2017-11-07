@@ -10,11 +10,8 @@
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js"></script>
         <link href='//fonts.googleapis.com/css?family=Roboto&subset=latin,cyrillic-ext,greek-ext,latin-ext' rel='stylesheet' type='text/css'>
     </head>
-    <body ng-app="LocalMovies" ng-controller="MainController">
-        <div>
-            <script src="CastVideos.js"></script>
-        </div>
 
+    <body ng-app="LocalMovies" ng-controller="MainController">
           <div id="main_video">
             <div class="imageSub">
                <div class="blackbg" id="playerstatebg">IDLE</div>
@@ -103,15 +100,8 @@
             </div>
         </div>
 
-          <script src="CastVideos.js"></script>
-          <script type="text/javascript">
-            var castPlayer = new CastPlayer();
-            window['__onGCastApiAvailable'] = function(isAvailable) {
-                if (isAvailable) {
-                    castPlayer.initializeCastPlayer();
-                }
-            };
-          </script>
+        <script src="CastVideos.js"></script>
+        <script src="LocalMovies.js"></script>
           <script type="text/javascript" src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
     </body>
 </html>
