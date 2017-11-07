@@ -4,7 +4,6 @@ var videoUrl;
 var videoTitle;
 var videoImageUrl;
 var accessToken = getToken();
-var choosingMedia = true;
 var apiUrl = "/movie-api";
 
 var castPlayer = new CastPlayer();
@@ -66,7 +65,6 @@ app.controller('MainController', ['$scope', 'movieService', function ($scope, mo
             $scope.updateList(movie.fileName);
         }
 
-        choosingMedia = true;
     };
 
     $scope.updateList = function (title) {
