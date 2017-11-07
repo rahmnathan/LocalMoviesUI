@@ -61,6 +61,7 @@ app.controller('MainController', ['$scope', 'movieService', function ($scope, mo
             videoUrl = apiUrl + "/video.mp4?path=" + encodeURIComponent($scope.currentPath + "/" + movie.fileName) + "&access_token=" + accessToken;
             document.getElementById('media_title').innerHTML = videoTitle;
             castPlayer.playerHandler.load();
+            document.body.scrollTop = document.documentElement.scrollTop = 0;
         } else {
             $scope.updateList(movie.fileName);
         }
