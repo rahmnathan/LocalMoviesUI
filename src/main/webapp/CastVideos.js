@@ -64,7 +64,7 @@ CastPlayer.prototype.initializeCastPlayer = function() {
 
     var options = {};
 
-    options.receiverApplicationId = chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID;
+    options.receiverApplicationId = "5F217DDB";
 
     cast.framework.CastContext.getInstance().setOptions(options);
 
