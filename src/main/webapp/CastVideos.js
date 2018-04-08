@@ -368,9 +368,6 @@ CastPlayer.prototype.setupRemotePlayer = function () {
         document.getElementById('playerstate').style.display = 'block';
         document.getElementById('playerstatebg').style.display = 'block';
         document.getElementById('video_image_overlay').style.display = 'block';
-        document.getElementById('playerstate').innerHTML =
-            this.mediaContents[ videoTitle + ' ' +
-            this.playerState + ' on ' + castSession.getCastDevice().friendlyName];
     }.bind(this);
 
     playerTarget.setVolume = function (volumeSliderPosition) {
