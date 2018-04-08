@@ -4,7 +4,7 @@ var videoUrl;
 var videoTitle;
 var videoImageUrl;
 var accessToken = getToken();
-var apiUrl = "/movie-api";
+var apiUrl = "https://localmovies.hopto.org/movie-api";
 
 var castPlayer = new CastPlayer();
 window['__onGCastApiAvailable'] = function(isAvailable) {
