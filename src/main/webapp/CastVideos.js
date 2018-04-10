@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * Width of progress bar in pixel
+ * @const
+ */
 var PROGRESS_BAR_WIDTH = 600;
 
 /** @const {number} Time in milliseconds for minimal progress update */
@@ -162,7 +166,7 @@ var PlayerHandler = function(castPlayer) {
     this.updateDisplayMessage = function () {
         this.target.updateDisplayMessage();
     }
-;
+    ;
     this.setVolume = function(volumeSliderPosition) {
         this.target.setVolume(volumeSliderPosition);
     };
@@ -329,7 +333,7 @@ CastPlayer.prototype.setupRemotePlayer = function () {
     }.bind(this);
 
     playerTarget.stop = function () {
-         this.remotePlayerController.stop();
+        this.remotePlayerController.stop();
     }.bind(this);
 
     playerTarget.load = function () {
@@ -339,14 +343,16 @@ CastPlayer.prototype.setupRemotePlayer = function () {
         mediaInfo.metadata = new chrome.cast.media.GenericMediaMetadata();
         mediaInfo.metadata.metadataType = chrome.cast.media.MetadataType.GENERIC;
         mediaInfo.metadata.title = videoTitle;
-        mediaInfo.metadata.images = [{'url': videoImageUrl}];
+        mediaInfo.metadata.images = [
+            {'url': videoImageUrl}];
 
         var request = new chrome.cast.media.LoadRequest(mediaInfo);
         castSession.loadMedia(request).then(
             this.playerHandler.loaded.bind(this.playerHandler),
             function (errorCode) {
                 this.playerState = PLAYER_STATE.ERROR;
-                console.log('Remote media load error: ' + errorCode.toString());
+                console.log('Remote media load error: ' +
+                    CastPlayer.getErrorMessage(errorCode));
             }.bind(this));
     }.bind(this);
 
@@ -440,7 +446,7 @@ CastPlayer.prototype.seekMedia = function(event) {
     var pos = parseInt(event.offsetX, 10);
     var pi = document.getElementById('progress_indicator');
     var p = document.getElementById('progress');
-    if (event.currentTarget.id === 'progress_indicator') {
+    if (event.currentTarget.id == 'progress_indicator') {
         var curr = parseInt(
             this.currentMediaTime + this.currentMediaDuration * pos /
             PROGRESS_BAR_WIDTH, 10);
@@ -701,7 +707,7 @@ CastPlayer.prototype.initializeUI = function() {
     document.getElementById('progress').addEventListener(
         'click', this.seekMedia.bind(this));
     document.getElementById('progress_indicator').addEventListener(
-       'dragend', this.seekMedia.bind(this));
+        'dragend', this.seekMedia.bind(this));
     document.getElementById('audio_on').addEventListener(
         'click', this.playerHandler.mute.bind(this.playerHandler));
     document.getElementById('audio_off').addEventListener(
@@ -745,4 +751,38 @@ CastPlayer.prototype.initializeUI = function() {
     document.getElementById('pause').addEventListener(
         'click', this.playerHandler.pause.bind(this.playerHandler));
     document.getElementById('progress_indicator').draggable = true;
+};
+
+/**
+ * Makes human-readable message from chrome.cast.Error
+ * @param {chrome.cast.Error} error
+ * @return {string} error message
+ */
+CastPlayer.getErrorMessage = function(error) {
+    switch (error.code) {
+        case chrome.cast.ErrorCode.API_NOT_INITIALIZED:
+            return 'The API is not initialized.' +
+                (error.description ? ' :' + error.description : '');
+        case chrome.cast.ErrorCode.CANCEL:
+            return 'The operation was canceled by the user' +
+                (error.description ? ' :' + error.description : '');
+        case chrome.cast.ErrorCode.CHANNEL_ERROR:
+            return 'A channel to the receiver is not available.' +
+                (error.description ? ' :' + error.description : '');
+        case chrome.cast.ErrorCode.EXTENSION_MISSING:
+            return 'The Cast extension is not available.' +
+                (error.description ? ' :' + error.description : '');
+        case chrome.cast.ErrorCode.INVALID_PARAMETER:
+            return 'The parameters to the operation were not valid.' +
+                (error.description ? ' :' + error.description : '');
+        case chrome.cast.ErrorCode.RECEIVER_UNAVAILABLE:
+            return 'No receiver was compatible with the session request.' +
+                (error.description ? ' :' + error.description : '');
+        case chrome.cast.ErrorCode.SESSION_ERROR:
+            return 'A session could not be created, or a session was invalid.' +
+                (error.description ? ' :' + error.description : '');
+        case chrome.cast.ErrorCode.TIMEOUT:
+            return 'The operation timed out.' +
+                (error.description ? ' :' + error.description : '');
+    }
 };
