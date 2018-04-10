@@ -64,6 +64,8 @@ CastPlayer.prototype.initializeCastPlayer = function() {
 
     cast.framework.CastContext.getInstance().setOptions(options);
 
+    this.remotePlayer = new cast.framework.RemotePlayer();
+    this.remotePlayerController = new cast.framework.RemotePlayerController(this.remotePlayer);
     this.remotePlayerController.addEventListener(
         cast.framework.RemotePlayerEventType.IS_CONNECTED_CHANGED,
         this.switchPlayer.bind(this)
@@ -78,6 +80,7 @@ CastPlayer.prototype.switchPlayer = function() {
     this.stopProgressTimer();
     this.resetVolumeSlider();
     this.playerHandler.stop();
+    this.playerState = PLAYER_STATE.IDLE;
     if (cast && cast.framework) {
         if (this.remotePlayer.isConnected) {
             this.setupRemotePlayer();
@@ -342,6 +345,7 @@ CastPlayer.prototype.setupRemotePlayer = function () {
         castSession.loadMedia(request).then(
             this.playerHandler.loaded.bind(this.playerHandler),
             function (errorCode) {
+                this.playerState = PLAYER_STATE.ERROR;
                 console.log('Remote media load error: ' + errorCode.toString());
             }.bind(this));
     }.bind(this);
@@ -475,11 +479,23 @@ CastPlayer.prototype.setVolume = function(mouseEvent) {
 };
 
 /**
+ * Starts the timer to increment the media progress bar
+ */
+CastPlayer.prototype.startProgressTimer = function() {
+    this.stopProgressTimer();
+
+    // Start progress timer
+    this.timer =
+        setInterval(this.incrementMediaTimeHandler, TIMER_STEP);
+};
+
+/**
  * Stops the timer to increment the media progress bar
  */
 CastPlayer.prototype.stopProgressTimer = function() {
     if (this.timer) {
         clearInterval(this.timer);
+        this.timer = null;
     }
 };
 
@@ -490,6 +506,7 @@ CastPlayer.prototype.stopProgressTimer = function() {
 CastPlayer.prototype.incrementMediaTime = function() {
     // First sync with the current player's time
     this.currentMediaTime = this.playerHandler.getCurrentMediaTime();
+    this.currentMediaDuration = this.playerHandler.getMediaDuration();
 
     if (this.playerState === PLAYER_STATE.PLAYING) {
         if (this.currentMediaTime < this.currentMediaDuration) {
@@ -529,6 +546,7 @@ CastPlayer.prototype.updateProgressBarByTimer = function() {
 CastPlayer.prototype.endPlayback = function() {
     this.currentMediaTime = 0;
     this.stopProgressTimer();
+    this.playerState = PLAYER_STATE.IDLE;
     this.playerHandler.updateDisplayMessage();
 
     document.getElementById('play').style.display = 'block';
@@ -589,6 +607,15 @@ CastPlayer.prototype.cancelFullScreen = function() {
         requestMethod.call(document);
     }
 };
+
+
+/**
+ * Exit fullscreen mode by escape
+ */
+CastPlayer.prototype.fullscreenChangeHandler = function() {
+    this.fullscreen = !this.fullscreen;
+};
+
 
 /**
  * Show expand/collapse fullscreen button
