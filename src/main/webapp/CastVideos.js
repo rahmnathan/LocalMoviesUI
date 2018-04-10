@@ -1,9 +1,5 @@
 'use strict';
 
-/**
- * Width of progress bar in pixel
- * @const
- */
 var PROGRESS_BAR_WIDTH = 600;
 
 /** @const {number} Time in milliseconds for minimal progress update */
@@ -68,8 +64,6 @@ CastPlayer.prototype.initializeCastPlayer = function() {
 
     cast.framework.CastContext.getInstance().setOptions(options);
 
-    this.remotePlayer = new cast.framework.RemotePlayer();
-    this.remotePlayerController = new cast.framework.RemotePlayerController(this.remotePlayer);
     this.remotePlayerController.addEventListener(
         cast.framework.RemotePlayerEventType.IS_CONNECTED_CHANGED,
         this.switchPlayer.bind(this)
@@ -84,7 +78,6 @@ CastPlayer.prototype.switchPlayer = function() {
     this.stopProgressTimer();
     this.resetVolumeSlider();
     this.playerHandler.stop();
-    this.playerState = PLAYER_STATE.IDLE;
     if (cast && cast.framework) {
         if (this.remotePlayer.isConnected) {
             this.setupRemotePlayer();
@@ -343,16 +336,13 @@ CastPlayer.prototype.setupRemotePlayer = function () {
         mediaInfo.metadata = new chrome.cast.media.GenericMediaMetadata();
         mediaInfo.metadata.metadataType = chrome.cast.media.MetadataType.GENERIC;
         mediaInfo.metadata.title = videoTitle;
-        mediaInfo.metadata.images = [
-            {'url': videoImageUrl}];
+        mediaInfo.metadata.images = [{'url': videoImageUrl}];
 
         var request = new chrome.cast.media.LoadRequest(mediaInfo);
         castSession.loadMedia(request).then(
             this.playerHandler.loaded.bind(this.playerHandler),
             function (errorCode) {
-                this.playerState = PLAYER_STATE.ERROR;
-                console.log('Remote media load error: ' +
-                    CastPlayer.getErrorMessage(errorCode));
+                console.log('Remote media load error: ' + errorCode.toString());
             }.bind(this));
     }.bind(this);
 
@@ -446,7 +436,7 @@ CastPlayer.prototype.seekMedia = function(event) {
     var pos = parseInt(event.offsetX, 10);
     var pi = document.getElementById('progress_indicator');
     var p = document.getElementById('progress');
-    if (event.currentTarget.id == 'progress_indicator') {
+    if (event.currentTarget.id === 'progress_indicator') {
         var curr = parseInt(
             this.currentMediaTime + this.currentMediaDuration * pos /
             PROGRESS_BAR_WIDTH, 10);
@@ -485,23 +475,11 @@ CastPlayer.prototype.setVolume = function(mouseEvent) {
 };
 
 /**
- * Starts the timer to increment the media progress bar
- */
-CastPlayer.prototype.startProgressTimer = function() {
-    this.stopProgressTimer();
-
-    // Start progress timer
-    this.timer =
-        setInterval(this.incrementMediaTimeHandler, TIMER_STEP);
-};
-
-/**
  * Stops the timer to increment the media progress bar
  */
 CastPlayer.prototype.stopProgressTimer = function() {
     if (this.timer) {
         clearInterval(this.timer);
-        this.timer = null;
     }
 };
 
@@ -512,7 +490,6 @@ CastPlayer.prototype.stopProgressTimer = function() {
 CastPlayer.prototype.incrementMediaTime = function() {
     // First sync with the current player's time
     this.currentMediaTime = this.playerHandler.getCurrentMediaTime();
-    this.currentMediaDuration = this.playerHandler.getMediaDuration();
 
     if (this.playerState === PLAYER_STATE.PLAYING) {
         if (this.currentMediaTime < this.currentMediaDuration) {
@@ -552,7 +529,6 @@ CastPlayer.prototype.updateProgressBarByTimer = function() {
 CastPlayer.prototype.endPlayback = function() {
     this.currentMediaTime = 0;
     this.stopProgressTimer();
-    this.playerState = PLAYER_STATE.IDLE;
     this.playerHandler.updateDisplayMessage();
 
     document.getElementById('play').style.display = 'block';
@@ -613,15 +589,6 @@ CastPlayer.prototype.cancelFullScreen = function() {
         requestMethod.call(document);
     }
 };
-
-
-/**
- * Exit fullscreen mode by escape
- */
-CastPlayer.prototype.fullscreenChangeHandler = function() {
-    this.fullscreen = !this.fullscreen;
-};
-
 
 /**
  * Show expand/collapse fullscreen button
@@ -751,38 +718,4 @@ CastPlayer.prototype.initializeUI = function() {
     document.getElementById('pause').addEventListener(
         'click', this.playerHandler.pause.bind(this.playerHandler));
     document.getElementById('progress_indicator').draggable = true;
-};
-
-/**
- * Makes human-readable message from chrome.cast.Error
- * @param {chrome.cast.Error} error
- * @return {string} error message
- */
-CastPlayer.getErrorMessage = function(error) {
-    switch (error.code) {
-        case chrome.cast.ErrorCode.API_NOT_INITIALIZED:
-            return 'The API is not initialized.' +
-                (error.description ? ' :' + error.description : '');
-        case chrome.cast.ErrorCode.CANCEL:
-            return 'The operation was canceled by the user' +
-                (error.description ? ' :' + error.description : '');
-        case chrome.cast.ErrorCode.CHANNEL_ERROR:
-            return 'A channel to the receiver is not available.' +
-                (error.description ? ' :' + error.description : '');
-        case chrome.cast.ErrorCode.EXTENSION_MISSING:
-            return 'The Cast extension is not available.' +
-                (error.description ? ' :' + error.description : '');
-        case chrome.cast.ErrorCode.INVALID_PARAMETER:
-            return 'The parameters to the operation were not valid.' +
-                (error.description ? ' :' + error.description : '');
-        case chrome.cast.ErrorCode.RECEIVER_UNAVAILABLE:
-            return 'No receiver was compatible with the session request.' +
-                (error.description ? ' :' + error.description : '');
-        case chrome.cast.ErrorCode.SESSION_ERROR:
-            return 'A session could not be created, or a session was invalid.' +
-                (error.description ? ' :' + error.description : '');
-        case chrome.cast.ErrorCode.TIMEOUT:
-            return 'The operation timed out.' +
-                (error.description ? ' :' + error.description : '');
-    }
 };

@@ -7,7 +7,7 @@ import java.util.Set;
 
 @ApplicationPath("/open")
 public class MovieApplication extends Application {
-    private HashSet<Object> singletons = new HashSet<Object>();
+    private HashSet<Object> singletons = new HashSet<>();
 
     public MovieApplication(){
         singletons.add(new UtilityEndpoints());
@@ -15,7 +15,7 @@ public class MovieApplication extends Application {
 
     @Override
     public Set<Class<?>> getClasses(){
-        return new HashSet<Class<?>>();
+        return new HashSet<>();
     }
 
     @Override
