@@ -55,7 +55,7 @@ app.controller('MainController', ['$scope', 'movieService', function ($scope, mo
 
     $scope.playMovie = function (movie) {
         var pathLength = $scope.currentPath.split("/").length;
-        if($scope.currentPath.toLowerCase().includes("movies") || pathLength == 3) {
+        if($scope.currentPath.toLowerCase().includes("movies") || pathLength === 3) {
             videoImageUrl = apiUrl + "/poster?path=" + encodeURIComponent(movie.path) + "&access_token=" + accessToken;
             videoTitle = movie.movieInfo.title;
             videoUrl = apiUrl + "/video.mp4?path=" + encodeURIComponent($scope.currentPath + "/" + movie.fileName) + "&access_token=" + accessToken;
@@ -69,7 +69,7 @@ app.controller('MainController', ['$scope', 'movieService', function ($scope, mo
     };
 
     $scope.updateList = function (title) {
-        if(title.toLowerCase() == "movies" || title.toLowerCase() == "series"){
+        if(title.toLowerCase() === "movies" || title.toLowerCase() === "series"){
             $scope.currentPath = title;
         } else {
             $scope.currentPath += ("/" + title);
