@@ -75,7 +75,7 @@
                             <img src="images/nopicture.gif" ng-click="playMovie(movie)">
                         </div>
                         <div ng-if="movie.image != 'noImage'">
-                            <img ng-src="{{apiUrl}}/poster?path={{movie.path}}&access_token={{accessToken}}" ng-click="playMovie(movie)">
+                            <img ng-src="{{apiUrl}}/movie/poster?path={{movie.path}}&access_token={{accessToken}}" ng-click="playMovie(movie)">
                         </div>
                         <p id="movieTitle">{{ movie.movie.title }}</p>
                         <p id="movieYear">Year - {{ movie.movie.releaseYear }}</p>
@@ -90,7 +90,7 @@
                             <img src="images/nopicture.gif" ng-click="playMovie(movie)">
                         </div>
                         <div ng-if="movie.image != 'noImage'">
-                            <img ng-src="{{apiUrl}}/poster?path={{movie.path}}&access_token={{accessToken}}" ng-click="playMovie(movie)">
+                            <img ng-src="{{apiUrl}}/movie/poster?path={{movie.path}}&access_token={{accessToken}}" ng-click="playMovie(movie)">
                         </div>
                         <p id="movieTitle">{{ movie.movie.title }}</p>
                         <p id="movieYear">Year - {{ movie.movie.releaseYear }}</p>
