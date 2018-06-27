@@ -4,7 +4,7 @@ var videoUrl;
 var videoTitle;
 var videoImageUrl;
 var accessToken = getToken();
-var apiUrl = "https://localmovies.hopto.org/movie-api";
+var apiUrl = "https://localmovies.hopto.org/localmovies/v2";
 
 var castPlayer = new CastPlayer();
 window['__onGCastApiAvailable'] = function(isAvailable) {
@@ -41,7 +41,7 @@ app.service('movieService', ['$http', function($http) {
             }
         };
 
-        return $http.post(apiUrl + "/titlerequest", JSON.stringify(movieRequest), config)
+        return $http.post(apiUrl + "/movies", JSON.stringify(movieRequest), config)
             .success(function(data) {
                 return data;
             });
@@ -56,9 +56,9 @@ app.controller('MainController', ['$scope', 'movieService', function ($scope, mo
     $scope.playMovie = function (movie) {
         var pathLength = $scope.currentPath.split("/").length;
         if($scope.currentPath.toLowerCase().includes("movies") || pathLength === 3) {
-            videoImageUrl = apiUrl + "/poster?path=" + encodeURIComponent(movie.path) + "&access_token=" + accessToken;
+            videoImageUrl = apiUrl + "/movie/poster?path=" + encodeURIComponent(movie.path) + "&access_token=" + accessToken;
             videoTitle = movie.movie.title;
-            videoUrl = apiUrl + "/video.mp4?path=" + encodeURIComponent($scope.currentPath + "/" + movie.fileName) + "&access_token=" + accessToken;
+            videoUrl = apiUrl + "/movie/stream.mp4?path=" + encodeURIComponent($scope.currentPath + "/" + movie.fileName) + "&access_token=" + accessToken;
             document.getElementById('media_title').innerHTML = videoTitle;
             castPlayer.playerHandler.load();
             document.body.scrollTop = document.documentElement.scrollTop = 0;
