@@ -33,6 +33,11 @@ body {
   margin: 2px;
 }
 
+#pagination {
+  color: white;
+  margin: 2px;
+}
+
 #movies {
   display: inline-table;
 }

@@ -28,11 +28,15 @@ function MovieRequest(path) {
     this.path = path;
     this.client = "WEBAPP";
     this.page = 0;
-    this.resultsPerPage = 700;
+    this.resultsPerPage = 1000;
 }
 
-app.service('movieService', ['$http', function($http) {
-    this.getMovies = function (path) {
+app.controller('MainController', ['$scope', '$http', function ($scope, $http) {
+    $scope.accessToken = accessToken;
+    $scope.apiUrl = apiUrl;
+    $scope.currentPath = "";
+
+    $scope.getMovies = function (path) {
         var movieRequest = new MovieRequest(path);
         var config = {
             headers : {
@@ -42,16 +46,17 @@ app.service('movieService', ['$http', function($http) {
         };
 
         return $http.post(apiUrl + "/movies", JSON.stringify(movieRequest), config)
-            .success(function(data) {
-                return data;
+            .then(function(response) {
+                $scope.movieCount = response.headers("count");
+                $scope.currentPage = 0;
+                $scope.pageSize = 18;
+                $scope.numberOfPages=function(){
+                    return Math.ceil($scope.movieCount/$scope.pageSize);
+                };
+
+                return response.data;
             });
     };
-}]);
-
-app.controller('MainController', ['$scope', 'movieService', function ($scope, movieService) {
-    $scope.accessToken = accessToken;
-    $scope.apiUrl = apiUrl;
-    $scope.currentPath = "";
 
     $scope.playMovie = function (movie) {
         var pathLength = $scope.currentPath.split("/").length;
@@ -68,6 +73,10 @@ app.controller('MainController', ['$scope', 'movieService', function ($scope, mo
 
     };
 
+    $scope.textIsNotEmpty = function (text) {
+        return text != null && text != "";
+    };
+
     $scope.updateList = function (title) {
         if(title.toLowerCase() === "movies" || title.toLowerCase() === "series"){
             $scope.currentPath = title;
@@ -75,7 +84,7 @@ app.controller('MainController', ['$scope', 'movieService', function ($scope, mo
             $scope.currentPath += ("/" + title);
         }
 
-        movieService.getMovies($scope.currentPath).success(function (data) {
+        $scope.getMovies($scope.currentPath).then(function (data) {
             $scope.movies = data;
         });
     };
