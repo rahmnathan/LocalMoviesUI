@@ -70,7 +70,6 @@ app.controller('MainController', ['$scope', '$http', function ($scope, $http) {
         } else {
             $scope.updateList(movie.fileName);
         }
-
     };
 
     $scope.textIsNotEmpty = function (text) {

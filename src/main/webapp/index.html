@@ -66,19 +66,9 @@
             </button>
         </p>
 
-        <p id="pagination">
-          <button ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">
-              Previous
-          </button>
-          {{currentPage+1}}/{{numberOfPages()}}
-          <button ng-disabled="currentPage >= movieCount/pageSize - 1" ng-click="currentPage=currentPage+1">
-              Next
-          </button>
-        </p>
-
         <div id="main">
             <div ng-if="selectedSort != 'movie.title'">
-                <div id="movies" ng-repeat="movie in movies | filter:movieSearch | orderBy:selectedSort:(selectedSort != 'movie.title') | limitTo:pageSize:(currentPage*pageSize)">
+                <div id="movies" ng-repeat="movie in movies | filter:movieSearch | orderBy:selectedSort:(selectedSort != 'movie.title')">
                     <div id="movie" align="center">
                         <div ng-if="movie.movie.image == 'noImage'">
                             <img src="images/nopicture.gif" ng-click="playMovie(movie)">
@@ -93,7 +83,7 @@
                 </div>
             </div>
             <div ng-if="selectedSort == 'movie.title'">
-                <div id="movies" ng-repeat="movie in movies | filter:movieSearch | limitTo:pageSize:(currentPage*pageSize)">
+                <div id="movies" ng-repeat="movie in movies | filter:movieSearch">
                     <div id="movie" align="center">
                         <div ng-if="movie.movie.image == 'noImage'">
                             <img src="images/nopicture.gif" ng-click="playMovie(movie)">
