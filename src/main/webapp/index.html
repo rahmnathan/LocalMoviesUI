@@ -58,6 +58,15 @@
                 <option value="movie.imdbrating">Rating</option>
                 <option value="movie.title">Title</option>
             </select>
+             Category: <select ng-model="selectedCategory" ng-init="selectedCategory = 'All'">
+                <option value="All">All</option>
+                <option value="Action">Action</option>
+                <option value="Comedy">Comedy</option>
+                <option value="Fantasy">Fantasy</option>
+                <option value="Horror">Horror</option>
+                <option value="Sci-Fi">Sci-Fi</option>
+                <option value="Thriller">Thriller</option>
+            </select>
             <button ng-click="updateList('Movies')">
                 Movies
             </button>
@@ -67,34 +76,17 @@
         </p>
 
         <div id="main">
-            <div ng-if="selectedSort != 'movie.title'">
-                <div id="movies" ng-repeat="movie in movies | filter:movieSearch | orderBy:selectedSort:(selectedSort != 'movie.title')">
-                    <div id="movie" align="center">
-                        <div ng-if="movie.movie.image == 'noImage'">
-                            <img src="images/nopicture.gif" ng-click="playMovie(movie)">
-                        </div>
-                        <div ng-if="movie.image != 'noImage'">
-                            <img ng-src="{{apiUrl}}/movie/poster?path={{movie.path}}&access_token={{accessToken}}" ng-click="playMovie(movie)" width="125" height="200">
-                        </div>
-                        <p id="movieTitle">{{ movie.movie.title }}</p>
-                        <p id="movieYear">Year - {{ movie.movie.releaseYear }}</p>
-                        <p id="movieRating">Rating - {{ movie.movie.imdbrating }}</p>
+            <div id="movies" ng-repeat="movie in movies | filter:movieSearch | filter: ((selectedCategory != 'All') ? {movie: {genre: selectedCategory}} : ''): false | orderBy:selectedSort:(selectedSort != 'movie.title')">
+                <div id="movie" align="center">
+                    <div ng-if="movie.movie.image == 'noImage'">
+                        <img src="images/nopicture.gif" ng-click="playMovie(movie)">
                     </div>
-                </div>
-            </div>
-            <div ng-if="selectedSort == 'movie.title'">
-                <div id="movies" ng-repeat="movie in movies | filter:movieSearch">
-                    <div id="movie" align="center">
-                        <div ng-if="movie.movie.image == 'noImage'">
-                            <img src="images/nopicture.gif" ng-click="playMovie(movie)">
-                        </div>
-                        <div ng-if="movie.image != 'noImage'">
-                            <img ng-src="{{apiUrl}}/movie/poster?path={{movie.path}}&access_token={{accessToken}}" ng-click="playMovie(movie)" width="125" height="200">
-                        </div>
-                        <p id="movieTitle">{{ movie.movie.title }}</p>
-                        <p id="movieYear">Year - {{ movie.movie.releaseYear }}</p>
-                        <p id="movieRating">Rating - {{ movie.movie.imdbrating }}</p>
+                    <div ng-if="movie.image != 'noImage'">
+                        <img ng-src="{{apiUrl}}/movie/poster?path={{movie.path}}&access_token={{accessToken}}" ng-click="playMovie(movie)" width="125" height="200">
                     </div>
+                    <p id="movieTitle">{{ movie.movie.title }}</p>
+                    <p id="movieYear">Year - {{ movie.movie.releaseYear }}</p>
+                    <p id="movieRating">Rating - {{ movie.movie.imdbrating }}</p>
                 </div>
             </div>
         </div>
