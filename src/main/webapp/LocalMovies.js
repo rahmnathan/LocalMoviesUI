@@ -24,6 +24,10 @@ var app = angular.module('LocalMovies', [
     'ngRoute'
 ]);
 
+app.filter('encodeURIComponent', function() {
+    return window.encodeURIComponent;
+});
+
 function MovieRequest(path) {
     this.path = path;
     this.client = "WEBAPP";
