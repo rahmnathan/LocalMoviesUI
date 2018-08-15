@@ -65,7 +65,7 @@ app.controller('MainController', ['$scope', '$http', function ($scope, $http) {
     $scope.playMovie = function (movie) {
         var pathLength = $scope.currentPath.split("/").length;
         if($scope.currentPath.toLowerCase().includes("movies") || pathLength === 3) {
-            videoImageUrl = apiUrl + "/movie/poster?path=" + encodeURIComponent(movie.path) + "&access_token=" + accessToken;
+            videoImageUrl = apiUrl + "/movie/poster?path=" + movie.path + "&access_token=" + accessToken;
             videoTitle = movie.movie.title;
             videoUrl = apiUrl + "/movie/stream.mp4?path=" + encodeURIComponent($scope.currentPath + "/" + movie.fileName) + "&access_token=" + accessToken;
             document.getElementById('media_title').innerHTML = videoTitle;
