@@ -2,7 +2,7 @@ FROM openjdk:10
 
 MAINTAINER nathan
 
-RUN mkdir /opt/localmovies
+RUN mkdir /opt && mkdir /opt/localmovies
 
 COPY src/main/resources/ssl-gen.sh /opt/localmovies/ssl-gen.sh
 RUN /opt/localmovies/ssl-gen.sh
