@@ -7,13 +7,13 @@ var accessToken = getToken();
 var apiUrl = "https://localmovies.hopto.org/localmovies/v2";
 
 var castPlayer = new CastPlayer();
-window['__onGCastApiAvailable'] = function (isAvailable) {
+window['__onGCastApiAvailable'] = function(isAvailable) {
     if (isAvailable) {
         castPlayer.initializeCastPlayer();
     }
 };
 
-function getToken() {
+function getToken(){
     var request = new XMLHttpRequest();
     request.open("POST", "/open/accessToken", false);
     request.send();
@@ -24,7 +24,7 @@ var app = angular.module('LocalMovies', [
     'ngRoute'
 ]);
 
-app.filter('encodeURIComponent', function () {
+app.filter('encodeURIComponent', function() {
     return window.encodeURIComponent;
 });
 
@@ -43,19 +43,19 @@ app.controller('MainController', ['$scope', '$http', function ($scope, $http) {
     $scope.getMovies = function (path) {
         var movieRequest = new MovieRequest(path);
         var config = {
-            headers: {
+            headers : {
                 'Content-Type': 'application/json',
                 'Authorization': 'bearer ' + accessToken
             }
         };
 
         return $http.post(apiUrl + "/movies", JSON.stringify(movieRequest), config)
-            .then(function (response) {
+            .then(function(response) {
                 $scope.movieCount = response.headers("count");
                 $scope.currentPage = 0;
                 $scope.pageSize = 18;
-                $scope.numberOfPages = function () {
-                    return Math.ceil($scope.movieCount / $scope.pageSize);
+                $scope.numberOfPages=function(){
+                    return Math.ceil($scope.movieCount/$scope.pageSize);
                 };
 
                 return response.data;
@@ -64,7 +64,7 @@ app.controller('MainController', ['$scope', '$http', function ($scope, $http) {
 
     $scope.playMovie = function (movie) {
         var pathLength = $scope.currentPath.split("/").length;
-        if ($scope.currentPath.toLowerCase().includes("movies") || pathLength === 3) {
+        if($scope.currentPath.toLowerCase().includes("movies") || pathLength === 3) {
             videoImageUrl = apiUrl + "/movie/poster?path=" + movie.path + "&access_token=" + accessToken;
             videoTitle = movie.movie.title;
             videoUrl = apiUrl + "/movie/stream.mp4?path=" + encodeURIComponent($scope.currentPath + "/" + movie.fileName) + "&access_token=" + accessToken;
@@ -77,11 +77,11 @@ app.controller('MainController', ['$scope', '$http', function ($scope, $http) {
     };
 
     $scope.textIsNotEmpty = function (text) {
-        return text != null && text !== "";
+        return text != null && text != "";
     };
 
     $scope.updateList = function (title) {
-        if (title.toLowerCase() === "movies" || title.toLowerCase() === "series") {
+        if(title.toLowerCase() === "movies" || title.toLowerCase() === "series"){
             $scope.currentPath = title;
         } else {
             $scope.currentPath += ("/" + title);

@@ -1,103 +1,98 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>LocalMovies</title>
-    <link rel="icon" type="image/x-icon" href="imagefiles/movie_icon.png"/>
-    <link rel="icon" type="image/png" href="imagefiles/movie_icon.png"/>
-    <link rel="stylesheet" type="text/css" href="css/CastVideos.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.min.js"></script>
-    <script src="https://code.angularjs.org/1.7.2/angular-route.min.js"></script>
-    <link href='//fonts.googleapis.com/css?family=Roboto&subset=latin,cyrillic-ext,greek-ext,latin-ext' rel='stylesheet'
-          type='text/css'>
-</head>
+    <head>
+        <title>LocalMovies</title>
+        <link rel="icon" type="image/x-icon" href="imagefiles/movie_icon.png" />
+        <link rel="icon" type="image/png" href="imagefiles/movie_icon.png" />
+        <link rel="stylesheet" type="text/css" href="css/CastVideos.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.min.js"></script>
+        <script src="https://code.angularjs.org/1.7.2/angular-route.min.js"></script>
+        <link href='//fonts.googleapis.com/css?family=Roboto&subset=latin,cyrillic-ext,greek-ext,latin-ext' rel='stylesheet' type='text/css'>
+    </head>
 
-<body ng-app="LocalMovies" ng-controller="MainController">
-<div id="main_video">
-    <div class="imageSub">
-        <div class="blackbg" id="playerstatebg">IDLE</div>
-        <div class=label id="playerstate">IDLE</div>
-        <img src="images/LocalMovies.png" id="video_image">
-        <div id="video_image_overlay"></div>
-        <video id="video_element">
-        </video>
-    </div>
-
-    <div id="media_control">
-        <div id="play"></div>
-        <div id="pause"></div>
-        <div id="progress_bg"></div>
-        <div id="progress"></div>
-        <div id="progress_indicator"></div>
-        <div id="fullscreen_expand"></div>
-        <div id="fullscreen_collapse"></div>
-        <button is="google-cast-button" id="castbutton"></button>
-        <div id="audio_bg"></div>
-        <div id="audio_bg_track"></div>
-        <div id="audio_indicator"></div>
-        <div id="audio_bg_level"></div>
-        <div id="audio_on"></div>
-        <div id="audio_off"></div>
-        <div id="duration">00:00:00</div>
-    </div>
-</div>
-<div id="media_info">
-    <div id="media_title">
-    </div>
-    <div id="media_subtitle">
-    </div>
-    <div id="media_desc">
-    </div>
-</div>
-
-<div id="carousel">
-</div>
-
-<p id="search">
-    Search by title: <input id="movieSearch" title="movieSearch" type="text" ng-model="movieSearch.movie.title"
-                            ng-change="currentPage = 0">
-    Sort by: <select ng-model="selectedSort" ng-init="selectedSort = 'movie.title'">
-    <option value="movie.releaseYear">Year</option>
-    <option value="movie.imdbRating">Rating</option>
-    <option value="movie.title">Title</option>
-</select>
-    Genre: <select ng-model="selectedCategory" ng-init="selectedCategory = 'All'">
-    <option value="All">All</option>
-    <option value="Action">Action</option>
-    <option value="Comedy">Comedy</option>
-    <option value="Fantasy">Fantasy</option>
-    <option value="Horror">Horror</option>
-    <option value="Sci-Fi">Sci-Fi</option>
-    <option value="Thriller">Thriller</option>
-</select>
-    <button ng-click="updateList('Movies')">
-        Movies
-    </button>
-    <button ng-click="updateList('Series')">
-        Series
-    </button>
-</p>
-
-<div id="main">
-    <div id="movies"
-         ng-repeat="movie in movies | filter:movieSearch | filter: ((selectedCategory != 'All') ? {movie: {genre: selectedCategory}} : ''): false | orderBy:selectedSort:(selectedSort != 'movie.title')">
-        <div id="movie" align="center">
-            <div ng-if="movie.movie.image == 'noImage'">
-                <img src="images/nopicture.gif" ng-click="playMovie(movie)">
+    <body ng-app="LocalMovies" ng-controller="MainController">
+          <div id="main_video">
+            <div class="imageSub">
+               <div class="blackbg" id="playerstatebg">IDLE</div>
+               <div class=label id="playerstate">IDLE</div>
+               <img src="images/LocalMovies.png" id="video_image">
+               <div id="video_image_overlay"></div>
+               <video id="video_element">
+               </video>
             </div>
-            <div ng-if="movie.image != 'noImage'">
-                <img ng-src="{{apiUrl}}/movie/poster?path={{movie.path | encodeURIComponent}}&access_token={{accessToken}}"
-                     ng-click="playMovie(movie)" width="125" height="200">
+
+            <div id="media_control">
+               <div id="play"></div>
+               <div id="pause"></div>
+               <div id="progress_bg"></div>
+               <div id="progress"></div>
+               <div id="progress_indicator"></div>
+               <div id="fullscreen_expand"></div>
+               <div id="fullscreen_collapse"></div>
+               <button is="google-cast-button" id="castbutton"></button>
+               <div id="audio_bg"></div>
+               <div id="audio_bg_track"></div>
+               <div id="audio_indicator"></div>
+               <div id="audio_bg_level"></div>
+               <div id="audio_on"></div>
+               <div id="audio_off"></div>
+               <div id="duration">00:00:00</div>
             </div>
-            <p id="movieTitle">{{ movie.movie.title }}</p>
-            <p id="movieYear">Year - {{ movie.movie.releaseYear }}</p>
-            <p id="movieRating">Rating - {{ movie.movie.imdbRating }}</p>
+          </div>
+          <div id="media_info">
+            <div id="media_title">
+            </div>
+            <div id="media_subtitle">
+            </div>
+            <div id="media_desc">
+            </div>
+          </div>
+
+          <div id="carousel">
+          </div>
+
+        <p id="search">
+            Search by title: <input id="movieSearch" title="movieSearch" type="text" ng-model="movieSearch.movie.title" ng-change="currentPage = 0">
+             Sort by: <select ng-model="selectedSort" ng-init="selectedSort = 'movie.title'">
+                <option value="movie.releaseYear">Year</option>
+                <option value="movie.imdbRating">Rating</option>
+                <option value="movie.title">Title</option>
+            </select>
+             Genre: <select ng-model="selectedCategory" ng-init="selectedCategory = 'All'">
+                <option value="All">All</option>
+                <option value="Action">Action</option>
+                <option value="Comedy">Comedy</option>
+                <option value="Fantasy">Fantasy</option>
+                <option value="Horror">Horror</option>
+                <option value="Sci-Fi">Sci-Fi</option>
+                <option value="Thriller">Thriller</option>
+            </select>
+            <button ng-click="updateList('Movies')">
+                Movies
+            </button>
+            <button ng-click="updateList('Series')">
+                Series
+            </button>
+        </p>
+
+        <div id="main">
+            <div id="movies" ng-repeat="movie in movies | filter:movieSearch | filter: ((selectedCategory != 'All') ? {movie: {genre: selectedCategory}} : ''): false | orderBy:selectedSort:(selectedSort != 'movie.title')">
+                <div id="movie" align="center">
+                    <div ng-if="movie.movie.image == 'noImage'">
+                        <img src="images/nopicture.gif" ng-click="playMovie(movie)">
+                    </div>
+                    <div ng-if="movie.image != 'noImage'">
+                        <img ng-src="{{apiUrl}}/movie/poster?path={{movie.path | encodeURIComponent}}&access_token={{accessToken}}" ng-click="playMovie(movie)" width="125" height="200">
+                    </div>
+                    <p id="movieTitle">{{ movie.movie.title }}</p>
+                    <p id="movieYear">Year - {{ movie.movie.releaseYear }}</p>
+                    <p id="movieRating">Rating - {{ movie.movie.imdbRating }}</p>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
 
-<script src="CastVideos.js"></script>
-<script src="LocalMovies.js"></script>
-<script type="text/javascript"
-        src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
-</body>
+        <script src="CastVideos.js"></script>
+        <script src="LocalMovies.js"></script>
+          <script type="text/javascript" src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
+    </body>
 </html>

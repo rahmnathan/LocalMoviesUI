@@ -29,7 +29,7 @@ var PLAYER_STATE = {
     ERROR: 'ERROR'
 };
 
-var CastPlayer = function () {
+var CastPlayer = function() {
     this.playerHandler = new PlayerHandler(this);
 
     /** @type {PLAYER_STATE} A state for media playback */
@@ -60,7 +60,7 @@ var CastPlayer = function () {
     this.initializeUI();
 };
 
-CastPlayer.prototype.initializeCastPlayer = function () {
+CastPlayer.prototype.initializeCastPlayer = function() {
 
     var options = {};
 
@@ -80,7 +80,7 @@ CastPlayer.prototype.initializeCastPlayer = function () {
  * PlayerHandler and setup functions
  */
 
-CastPlayer.prototype.switchPlayer = function () {
+CastPlayer.prototype.switchPlayer = function() {
     this.stopProgressTimer();
     this.resetVolumeSlider();
     this.playerHandler.stop();
@@ -94,14 +94,14 @@ CastPlayer.prototype.switchPlayer = function () {
     this.setupLocalPlayer();
 };
 
-var PlayerHandler = function (castPlayer) {
+var PlayerHandler = function(castPlayer) {
     this.target = {};
 
-    this.setTarget = function (target) {
+    this.setTarget= function(target) {
         this.target = target;
     };
 
-    this.play = function () {
+    this.play = function() {
         if (castPlayer.playerState !== PLAYER_STATE.PLAYING &&
             castPlayer.playerState !== PLAYER_STATE.PAUSED &&
             castPlayer.playerState !== PLAYER_STATE.LOADED) {
@@ -116,7 +116,7 @@ var PlayerHandler = function (castPlayer) {
         this.updateDisplayMessage();
     };
 
-    this.pause = function () {
+    this.pause = function() {
         if (castPlayer.playerState !== PLAYER_STATE.PLAYING) {
             return;
         }
@@ -128,13 +128,13 @@ var PlayerHandler = function (castPlayer) {
         this.updateDisplayMessage();
     };
 
-    this.stop = function () {
+    this.stop = function() {
         this.pause();
         castPlayer.playerState = PLAYER_STATE.STOPPED;
         this.updateDisplayMessage();
     };
 
-    this.load = function () {
+    this.load = function() {
         castPlayer.playerState = PLAYER_STATE.LOADING;
 
         document.getElementById('media_title').innerHTML = videoTitle;
@@ -143,7 +143,7 @@ var PlayerHandler = function (castPlayer) {
         this.updateDisplayMessage();
     };
 
-    this.loaded = function () {
+    this.loaded = function() {
         castPlayer.currentMediaDuration = this.getMediaDuration();
         castPlayer.updateMediaDuration();
         castPlayer.playerState = PLAYER_STATE.LOADED;
@@ -155,11 +155,11 @@ var PlayerHandler = function (castPlayer) {
         this.updateDisplayMessage();
     };
 
-    this.getCurrentMediaTime = function () {
+    this.getCurrentMediaTime = function() {
         return this.target.getCurrentMediaTime();
     };
 
-    this.getMediaDuration = function () {
+    this.getMediaDuration = function() {
         return this.target.getMediaDuration();
     };
 
@@ -167,27 +167,27 @@ var PlayerHandler = function (castPlayer) {
         this.target.updateDisplayMessage();
     }
     ;
-    this.setVolume = function (volumeSliderPosition) {
+    this.setVolume = function(volumeSliderPosition) {
         this.target.setVolume(volumeSliderPosition);
     };
 
-    this.mute = function () {
+    this.mute = function() {
         this.target.mute();
         document.getElementById('audio_on').style.display = 'none';
         document.getElementById('audio_off').style.display = 'block';
     };
 
-    this.unMute = function () {
+    this.unMute = function() {
         this.target.unMute();
         document.getElementById('audio_on').style.display = 'block';
         document.getElementById('audio_off').style.display = 'none';
     };
 
-    this.isMuted = function () {
+    this.isMuted = function() {
         return this.target.isMuted();
     };
 
-    this.seekTo = function (time) {
+    this.seekTo = function(time) {
         this.target.seekTo(time);
         this.updateDisplayMessage();
     };
@@ -204,7 +204,7 @@ CastPlayer.prototype.setupLocalPlayer = function () {
     // This object will implement PlayerHandler callbacks with localPlayer
     var playerTarget = {};
 
-    playerTarget.play = function () {
+    playerTarget.play = function() {
         localPlayer.play();
 
         var vi = document.getElementById('video_image');
@@ -220,16 +220,16 @@ CastPlayer.prototype.setupLocalPlayer = function () {
         localPlayer.stop();
     };
 
-    playerTarget.load = function () {
+    playerTarget.load = function() {
         localPlayer.src = videoUrl;
         localPlayer.load();
     }.bind(this);
 
-    playerTarget.getCurrentMediaTime = function () {
+    playerTarget.getCurrentMediaTime = function() {
         return localPlayer.currentTime;
     };
 
-    playerTarget.getMediaDuration = function () {
+    playerTarget.getMediaDuration = function() {
         return localPlayer.duration;
     };
 
@@ -239,7 +239,7 @@ CastPlayer.prototype.setupLocalPlayer = function () {
         document.getElementById('video_image_overlay').style.display = 'none';
     };
 
-    playerTarget.setVolume = function (volumeSliderPosition) {
+    playerTarget.setVolume = function(volumeSliderPosition) {
         localPlayer.volume = volumeSliderPosition < FULL_VOLUME_HEIGHT ?
             volumeSliderPosition / FULL_VOLUME_HEIGHT : 1;
         var p = document.getElementById('audio_bg_level');
@@ -247,19 +247,19 @@ CastPlayer.prototype.setupLocalPlayer = function () {
         p.style.marginTop = -volumeSliderPosition + 'px';
     };
 
-    playerTarget.mute = function () {
+    playerTarget.mute = function() {
         localPlayer.muted = true;
     };
 
-    playerTarget.unMute = function () {
+    playerTarget.unMute = function() {
         localPlayer.muted = false;
     };
 
-    playerTarget.isMuted = function () {
+    playerTarget.isMuted = function() {
         return localPlayer.muted;
     };
 
-    playerTarget.seekTo = function (time) {
+    playerTarget.seekTo = function(time) {
         localPlayer.currentTime = time;
     };
 
@@ -283,7 +283,7 @@ CastPlayer.prototype.setupRemotePlayer = function () {
     // Add event listeners for player changes which may occur outside sender app
     this.remotePlayerController.addEventListener(
         cast.framework.RemotePlayerEventType.IS_PAUSED_CHANGED,
-        function () {
+        function() {
             if (this.remotePlayer.isPaused) {
                 this.playerHandler.pause();
             } else {
@@ -294,7 +294,7 @@ CastPlayer.prototype.setupRemotePlayer = function () {
 
     this.remotePlayerController.addEventListener(
         cast.framework.RemotePlayerEventType.IS_MUTED_CHANGED,
-        function () {
+        function() {
             if (this.remotePlayer.isMuted) {
                 this.playerHandler.mute();
             } else {
@@ -305,7 +305,7 @@ CastPlayer.prototype.setupRemotePlayer = function () {
 
     this.remotePlayerController.addEventListener(
         cast.framework.RemotePlayerEventType.VOLUME_LEVEL_CHANGED,
-        function () {
+        function() {
             var newVolume = this.remotePlayer.volumeLevel * FULL_VOLUME_HEIGHT;
             var p = document.getElementById('audio_bg_level');
             p.style.height = newVolume + 'px';
@@ -356,11 +356,11 @@ CastPlayer.prototype.setupRemotePlayer = function () {
             }.bind(this));
     }.bind(this);
 
-    playerTarget.getCurrentMediaTime = function () {
+    playerTarget.getCurrentMediaTime = function() {
         return this.remotePlayer.currentTime;
     }.bind(this);
 
-    playerTarget.getMediaDuration = function () {
+    playerTarget.getMediaDuration = function() {
         return this.remotePlayer.duration;
     }.bind(this);
 
@@ -375,7 +375,7 @@ CastPlayer.prototype.setupRemotePlayer = function () {
         var currentVolume = this.remotePlayer.volumeLevel;
         var p = document.getElementById('audio_bg_level');
         if (volumeSliderPosition < FULL_VOLUME_HEIGHT) {
-            var vScale = this.currentVolume * FULL_VOLUME_HEIGHT;
+            var vScale =  this.currentVolume * FULL_VOLUME_HEIGHT;
             if (volumeSliderPosition > vScale) {
                 volumeSliderPosition = vScale + (pos - vScale) / 2;
             }
@@ -401,7 +401,7 @@ CastPlayer.prototype.setupRemotePlayer = function () {
         }
     }.bind(this);
 
-    playerTarget.isMuted = function () {
+    playerTarget.isMuted = function() {
         return this.remotePlayer.isMuted;
     }.bind(this);
 
@@ -430,7 +430,7 @@ CastPlayer.prototype.setupRemotePlayer = function () {
 /**
  * Callback when media is loaded in local player
  */
-CastPlayer.prototype.onMediaLoadedLocally = function () {
+CastPlayer.prototype.onMediaLoadedLocally = function() {
     var localPlayer = document.getElementById('video_element');
     localPlayer.currentTime = this.currentMediaTime;
 
@@ -442,7 +442,7 @@ CastPlayer.prototype.onMediaLoadedLocally = function () {
  * Media seek function
  * @param {Event} event An event object from seek
  */
-CastPlayer.prototype.seekMedia = function (event) {
+CastPlayer.prototype.seekMedia = function(event) {
     var pos = parseInt(event.offsetX, 10);
     var pi = document.getElementById('progress_indicator');
     var p = document.getElementById('progress');
@@ -473,7 +473,7 @@ CastPlayer.prototype.seekMedia = function (event) {
  * Set current player volume
  * @param {Event} mouseEvent
  */
-CastPlayer.prototype.setVolume = function (mouseEvent) {
+CastPlayer.prototype.setVolume = function(mouseEvent) {
     var p = document.getElementById('audio_bg_level');
     var pos = 0;
     if (mouseEvent.currentTarget.id === 'audio_bg_track') {
@@ -487,7 +487,7 @@ CastPlayer.prototype.setVolume = function (mouseEvent) {
 /**
  * Starts the timer to increment the media progress bar
  */
-CastPlayer.prototype.startProgressTimer = function () {
+CastPlayer.prototype.startProgressTimer = function() {
     this.stopProgressTimer();
 
     // Start progress timer
@@ -498,7 +498,7 @@ CastPlayer.prototype.startProgressTimer = function () {
 /**
  * Stops the timer to increment the media progress bar
  */
-CastPlayer.prototype.stopProgressTimer = function () {
+CastPlayer.prototype.stopProgressTimer = function() {
     if (this.timer) {
         clearInterval(this.timer);
         this.timer = null;
@@ -509,7 +509,7 @@ CastPlayer.prototype.stopProgressTimer = function () {
  * Helper function
  * Increment media current position by 1 second
  */
-CastPlayer.prototype.incrementMediaTime = function () {
+CastPlayer.prototype.incrementMediaTime = function() {
     // First sync with the current player's time
     this.currentMediaTime = this.playerHandler.getCurrentMediaTime();
     this.currentMediaDuration = this.playerHandler.getMediaDuration();
@@ -527,7 +527,7 @@ CastPlayer.prototype.incrementMediaTime = function () {
 /**
  * Update progress bar based on timer
  */
-CastPlayer.prototype.updateProgressBarByTimer = function () {
+CastPlayer.prototype.updateProgressBarByTimer = function() {
     var p = document.getElementById('progress');
     if (isNaN(parseInt(p.style.width, 10))) {
         p.style.width = 0;
@@ -549,7 +549,7 @@ CastPlayer.prototype.updateProgressBarByTimer = function () {
 /**
  *  End playback. Called when media ends.
  */
-CastPlayer.prototype.endPlayback = function () {
+CastPlayer.prototype.endPlayback = function() {
     this.currentMediaTime = 0;
     this.stopProgressTimer();
     this.playerState = PLAYER_STATE.IDLE;
@@ -563,7 +563,7 @@ CastPlayer.prototype.endPlayback = function () {
  * @param {number} durationInSec
  * @return {string}
  */
-CastPlayer.getDurationString = function (durationInSec) {
+CastPlayer.getDurationString = function(durationInSec) {
     var durationString = '' + Math.floor(durationInSec % 60);
     var durationInMin = Math.floor(durationInSec / 60);
     if (durationInMin === 0) {
@@ -580,7 +580,7 @@ CastPlayer.getDurationString = function (durationInSec) {
 /**
  * Updates media duration text in UI
  */
-CastPlayer.prototype.updateMediaDuration = function () {
+CastPlayer.prototype.updateMediaDuration = function() {
     document.getElementById('duration').innerHTML =
         CastPlayer.getDurationString(this.currentMediaDuration);
 };
@@ -588,7 +588,7 @@ CastPlayer.prototype.updateMediaDuration = function () {
 /**
  * Request full screen mode
  */
-CastPlayer.prototype.requestFullScreen = function () {
+CastPlayer.prototype.requestFullScreen = function() {
     // Supports most browsers and their versions.
     var element = document.getElementById('video_element');
     var requestMethod =
@@ -604,7 +604,7 @@ CastPlayer.prototype.requestFullScreen = function () {
 /**
  * Exit full screen mode
  */
-CastPlayer.prototype.cancelFullScreen = function () {
+CastPlayer.prototype.cancelFullScreen = function() {
     // Supports most browsers and their versions.
     var requestMethod =
         document['cancelFullScreen'] || document['webkitCancelFullScreen'];
@@ -618,7 +618,7 @@ CastPlayer.prototype.cancelFullScreen = function () {
 /**
  * Exit fullscreen mode by escape
  */
-CastPlayer.prototype.fullscreenChangeHandler = function () {
+CastPlayer.prototype.fullscreenChangeHandler = function() {
     this.fullscreen = !this.fullscreen;
 };
 
@@ -626,7 +626,7 @@ CastPlayer.prototype.fullscreenChangeHandler = function () {
 /**
  * Show expand/collapse fullscreen button
  */
-CastPlayer.prototype.showFullscreenButton = function () {
+CastPlayer.prototype.showFullscreenButton = function() {
     if (this.fullscreen) {
         document.getElementById('fullscreen_expand').style.display = 'none';
         document.getElementById('fullscreen_collapse').style.display = 'block';
@@ -640,7 +640,7 @@ CastPlayer.prototype.showFullscreenButton = function () {
 /**
  * Hide expand/collapse fullscreen button
  */
-CastPlayer.prototype.hideFullscreenButton = function () {
+CastPlayer.prototype.hideFullscreenButton = function() {
     document.getElementById('fullscreen_expand').style.display = 'none';
     document.getElementById('fullscreen_collapse').style.display = 'none';
 };
@@ -648,7 +648,7 @@ CastPlayer.prototype.hideFullscreenButton = function () {
 /**
  * Show the media control
  */
-CastPlayer.prototype.showMediaControl = function () {
+CastPlayer.prototype.showMediaControl = function() {
     document.getElementById('media_control').style.opacity = 0.7;
 };
 
@@ -656,7 +656,7 @@ CastPlayer.prototype.showMediaControl = function () {
 /**
  * Hide the media control
  */
-CastPlayer.prototype.hideMediaControl = function () {
+CastPlayer.prototype.hideMediaControl = function() {
     document.getElementById('media_control').style.opacity = 0;
 };
 
@@ -664,7 +664,7 @@ CastPlayer.prototype.hideMediaControl = function () {
 /**
  * Show the volume slider
  */
-CastPlayer.prototype.showVolumeSlider = function () {
+CastPlayer.prototype.showVolumeSlider = function() {
     if (!this.playerHandler.isMuted()) {
         document.getElementById('audio_bg').style.opacity = 1;
         document.getElementById('audio_bg_track').style.opacity = 1;
@@ -676,7 +676,7 @@ CastPlayer.prototype.showVolumeSlider = function () {
 /**
  * Hide the volume slider
  */
-CastPlayer.prototype.hideVolumeSlider = function () {
+CastPlayer.prototype.hideVolumeSlider = function() {
     document.getElementById('audio_bg').style.opacity = 0;
     document.getElementById('audio_bg_track').style.opacity = 0;
     document.getElementById('audio_bg_level').style.opacity = 0;
@@ -686,7 +686,7 @@ CastPlayer.prototype.hideVolumeSlider = function () {
 /**
  * Reset the volume slider
  */
-CastPlayer.prototype.resetVolumeSlider = function () {
+CastPlayer.prototype.resetVolumeSlider = function() {
     var volumeTrackHeight = document.getElementById('audio_bg_track').clientHeight;
     var defaultVolumeSliderHeight = DEFAULT_VOLUME * volumeTrackHeight;
     document.getElementById('audio_bg_level').style.height =
@@ -698,7 +698,7 @@ CastPlayer.prototype.resetVolumeSlider = function () {
 /**
  * Initialize UI components and add event listeners
  */
-CastPlayer.prototype.initializeUI = function () {
+CastPlayer.prototype.initializeUI = function() {
     document.getElementById('media_title').innerHTML = videoTitle;
 
     // Add event handlers to UI components
@@ -758,7 +758,7 @@ CastPlayer.prototype.initializeUI = function () {
  * @param {chrome.cast.Error} error
  * @return {string} error message
  */
-CastPlayer.getErrorMessage = function (error) {
+CastPlayer.getErrorMessage = function(error) {
     switch (error.code) {
         case chrome.cast.ErrorCode.API_NOT_INITIALIZED:
             return 'The API is not initialized.' +
