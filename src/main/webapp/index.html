@@ -53,7 +53,7 @@
 
         <p id="search">
             Search by title: <input id="movieSearch" title="movieSearch" type="text" ng-model="movieSearch.movie.title" ng-change="currentPage = 0">
-             Sort by: <select ng-model="selectedSort" ng-init="selectedSort = 'movie.title'">
+             Sort by: <select ng-model="selectedSort">
                 <option value="movie.releaseYear">Year</option>
                 <option value="movie.imdbRating">Rating</option>
                 <option value="movie.title">Title</option>
@@ -76,7 +76,7 @@
         </p>
 
         <div id="main">
-            <div id="movies" ng-repeat="movie in movies | filter:movieSearch | filter: ((selectedCategory != 'All') ? {movie: {genre: selectedCategory}} : ''): false | orderBy:selectedSort:(selectedSort != 'movie.title')">
+            <div id="movies" ng-repeat="movie in movies | filter:movieSearch | filter: ((selectedCategory != 'All') ? {movie: {genre: selectedCategory}} : ''): false | orderBy:selectedSort">
                 <div id="movie" align="center">
                     <div ng-if="movie.movie.image == 'noImage'">
                         <img src="images/nopicture.gif" ng-click="playMovie(movie)">
